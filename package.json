@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "db": "mongod",
-    "start": "node server/index.js",
+    "react-dev": "webpack -d --watch",
     "start-dev": "nodemon server/index.js"
   },
   "repository": {
@@ -15,6 +15,13 @@
   },
   "author": "Jon Thomas, Pooja Submanranian",
   "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.23.1",
+    "babel-loader": "^6.3.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "webpack": "^2.2.1"
+  },
   "bugs": {
     "url": "https://github.com/jongregtom/service-request/issues"
   },
@@ -22,6 +29,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
-    "mongoose": "^5.2.12"
+    "mongoose": "^5.2.12",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
   }
 }
