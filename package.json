@@ -6,6 +6,9 @@
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "startdev": "nodemon -L server/index.js",
+    "startwebpack":"webpack  --config ./webpack.config.js --watch",
+    "startnode":"nodemon server/index.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
   },
@@ -22,6 +25,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "babel-preset-stage-1": "^6.1.18",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
     "lodash": "^3.10.1",
     "react": "16.3.2",
     "react-dom": "16.3.2",
