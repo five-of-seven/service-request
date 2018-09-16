@@ -19,7 +19,10 @@ export default function(state={},action){
 		case FETCH_POSTS : 
 			//action.payload.data will return an array of objects --> which we have to convert to object of objects
 			//so we use lodash --> _.mapKeys(array,key)
-			return _.mapKeys(action.payload.data,'id');
+			var result = action.payload.data;
+			var reverse = result.reverse();
+			console.log('action.payload.data',reverse);
+			return _.mapKeys(reverse,'_id');
 
 	}
 

@@ -79,40 +79,43 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _posts_index = __webpack_require__(355);
+	var _posts_index = __webpack_require__(356);
 
 	var _posts_index2 = _interopRequireDefault(_posts_index);
 
-	var _posts_new = __webpack_require__(356);
+	var _posts_new = __webpack_require__(357);
 
 	var _posts_new2 = _interopRequireDefault(_posts_new);
 
-	var _posts_show = __webpack_require__(357);
+	var _posts_show = __webpack_require__(358);
 
 	var _posts_show2 = _interopRequireDefault(_posts_show);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var createStoreWithMiddleware = (0, _redux.applyMiddleware)(_reduxPromise2.default)(_redux.createStore);
+	// const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+
+	var composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.compose;
+	var store = (0, _redux.createStore)(_reducers2.default, /* preloadedState, */composeEnhancers((0, _redux.applyMiddleware)(_reduxPromise2.default)));
 
 	_reactDom2.default.render(_react2.default.createElement(
-	  _reactRedux.Provider,
-	  { store: createStoreWithMiddleware(_reducers2.default) },
-	  _react2.default.createElement(
-	    _reactRouterDom.BrowserRouter,
-	    null,
+	    _reactRedux.Provider,
+	    { store: store },
 	    _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(
-	        _reactRouterDom.Switch,
+	        _reactRouterDom.BrowserRouter,
 	        null,
-	        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/new', component: _posts_new2.default }),
-	        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/:id', component: _posts_show2.default }),
-	        _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _posts_index2.default })
-	      )
+	        _react2.default.createElement(
+	            'div',
+	            null,
+	            _react2.default.createElement(
+	                _reactRouterDom.Switch,
+	                null,
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/new', component: _posts_new2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/:id', component: _posts_show2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _posts_index2.default })
+	            )
+	        )
 	    )
-	  )
 	), document.querySelector('.container'));
 
 /***/ }),
@@ -26410,12 +26413,19 @@
 
 	var _reducer_posts2 = _interopRequireDefault(_reducer_posts);
 
+	var _reducer_zip = __webpack_require__(355);
+
+	var _reducer_zip2 = _interopRequireDefault(_reducer_zip);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// since reducer is too common a name we are giving it an alias - formReducer
 	var rootReducer = (0, _redux.combineReducers)({
 	  posts: _reducer_posts2.default,
-	  form: _reduxForm.reducer
-	}); // since reducer is too common a name we are giving it an alias - formReducer
+	  form: _reduxForm.reducer,
+	  zip: _reducer_zip2.default
+	});
+
 	exports.default = rootReducer;
 
 /***/ }),
@@ -36851,7 +36861,10 @@
 			case _index.FETCH_POSTS:
 				//action.payload.data will return an array of objects --> which we have to convert to object of objects
 				//so we use lodash --> _.mapKeys(array,key)
-				return _lodash2.default.mapKeys(action.payload.data, 'id');
+				var result = action.payload.data;
+				var reverse = result.reverse();
+				console.log('action.payload.data', reverse);
+				return _lodash2.default.mapKeys(reverse, '_id');
 
 		}
 
@@ -49233,10 +49246,11 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.FETCH_POST = exports.CREATE_POST = exports.FETCH_POSTS = undefined;
+	exports.UPDATE_ZIP = exports.FETCH_POST = exports.CREATE_POST = exports.FETCH_POSTS = undefined;
 	exports.fetchPosts = fetchPosts;
 	exports.createPost = createPost;
 	exports.fetchPost = fetchPost;
+	exports.updateZip = updateZip;
 
 	var _axios = __webpack_require__(329);
 
@@ -49247,14 +49261,20 @@
 	var FETCH_POSTS = exports.FETCH_POSTS = 'FETCH_POSTS';
 	var CREATE_POST = exports.CREATE_POST = 'CREATE_POST';
 	var FETCH_POST = exports.FETCH_POST = 'FETCH_POST';
+	var UPDATE_ZIP = exports.UPDATE_ZIP = 'UPDATE_ZIP';
 
 	var rooturl = 'https://reduxblog.herokuapp.com/api';
 
+	var jonurl = 'http://18.191.218.237:80';
+
 	var API_KEY = '?key=PAPERCLIP1234';
 
-	function fetchPosts() {
+	function fetchPosts(zip) {
 
-		var url = rooturl + '/posts' + API_KEY;
+		// const url = `${rooturl}/posts${API_KEY}`
+		console.log('zip', zip);
+
+		var url = jonurl + '/servicesByZip?zip=' + zip;
 
 		var request = _axios2.default.get(url);
 
@@ -49271,23 +49291,38 @@
 
 	function createPost(values, callback) {
 
-		var request = _axios2.default.post(rooturl + '/posts' + API_KEY, values).then(function () {
+		// const request = axios.post(`${rooturl}/posts${API_KEY}`, values)
+		// .then(()=>{
+		// 	callback()
+		// });
+		var request = _axios2.default.post(jonurl + '/service', values).then(function () {
 			callback();
 		});
 
+		console.log('values inside createPost', values);
+
 		return {
 			type: CREATE_POST,
-			payload: request
+			payload: request //response data from the API
 		};
 	}
 
+	// fetching a single post based on id   --- fetch all the posts based on zipcode
 	function fetchPost(id) {
 		var request = _axios2.default.get(rooturl + '/posts/' + id + API_KEY);
+		consolelog('inside fetchPost', id);
 
 		return {
 
 			type: FETCH_POST,
 			payload: request
+		};
+	}
+
+	function updateZip() {
+		return {
+			type: UPDATE_ZIP,
+			payload: "0000"
 		};
 	}
 
@@ -50848,6 +50883,49 @@
 		value: true
 	});
 
+	exports.default = function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "0000";
+		var action = arguments[1];
+
+
+		switch (action.type) {
+
+			case _index.UPDATE_ZIP:
+				//action.payload.data will return an array of objects --> which we have to convert to object of objects
+				//so we use lodash --> _.mapKeys(array,key)
+				var result = action.payload; // {userid , subject , zipcode , message}
+				// result.sort(function(a,b){
+				// 	return a.time-b.time;
+				// })
+				// console.log('result',result);
+				// console.log('action.payload.data',action.payload.data);
+				// return _.mapKeys(action.payload.data,'_id');
+				console.log('result in UPDATE_ZIP', action);
+				return result;
+
+		}
+
+		return state;
+	};
+
+	var _lodash = __webpack_require__(327);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _index = __webpack_require__(328);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 356 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -50893,8 +50971,9 @@
 		_createClass(PostsIndex, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				this.props.updateZip();
 
-				this.props.fetchPosts();
+				this.props.fetchPosts(this.props.zip);
 			}
 		}, {
 			key: 'renderPosts',
@@ -50902,25 +50981,39 @@
 
 				return _lodash2.default.map(this.props.posts, function (post) {
 
-					return _react2.default.createElement(
-						'li',
-						{ key: post.id, className: 'list-group-item' },
+					return (
+						// <li key={post.id} className="list-group-item"> 
+
 						_react2.default.createElement(
-							'h3',
-							null,
-							post.title
-						),
-						_react2.default.createElement(
-							'h6',
-							null,
-							'Categories : ',
-							post.categories
-						),
-						_react2.default.createElement(
-							'p',
-							null,
-							' Content : ',
-							post.content
+							'li',
+							{ key: post._id, className: 'list-group-item' },
+							_react2.default.createElement(
+								'h2',
+								null,
+								'Pooja : '
+							),
+							_react2.default.createElement(
+								'h3',
+								null,
+								post.subject
+							),
+							_react2.default.createElement(
+								'p',
+								null,
+								post.text
+							),
+							_react2.default.createElement(
+								'i',
+								null,
+								'Status : ',
+								post.status
+							),
+							'   ',
+							_react2.default.createElement(
+								'button',
+								{ type: 'submit', className: 'btn btn-success' },
+								' Fulfill Service'
+							)
 						)
 					);
 				});
@@ -50954,14 +51047,15 @@
 
 	function mapStateToProps(state) {
 		return {
-			posts: state.posts
+			posts: state.posts,
+			zip: state.zip
 		};
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPosts: _index.fetchPosts })(PostsIndex);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPosts: _index.fetchPosts, updateZip: _index.updateZip })(PostsIndex);
 
 /***/ }),
-/* 356 */
+/* 357 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51028,6 +51122,10 @@
 			value: function onSubmit(values) {
 				var _this2 = this;
 
+				// var data = {'userId': '100','zip': 0000, 'subject': values.title, 'text': values.content }
+				// console.log('data',data)
+				values["zip"] = this.props.zip;
+				console.log('values', values);
 				this.props.createPost(values, function () {
 					_this2.props.history.push('/');
 				});
@@ -51037,7 +51135,6 @@
 			value: function render() {
 				var handleSubmit = this.props.handleSubmit;
 
-
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -51045,17 +51142,12 @@
 						'form',
 						{ onSubmit: handleSubmit(this.onSubmit.bind(this)) },
 						_react2.default.createElement(_reduxForm.Field, {
-							name: 'title',
-							label: 'Title',
+							name: 'subject',
+							label: 'Subject',
 							component: this.renderField
 						}),
 						_react2.default.createElement(_reduxForm.Field, {
-							name: 'categories',
-							label: 'Categories',
-							component: this.renderField
-						}),
-						_react2.default.createElement(_reduxForm.Field, {
-							name: 'content',
+							name: 'text',
 							label: 'Post Content',
 							component: this.renderField
 						}),
@@ -51077,10 +51169,16 @@
 		return PostsNew;
 	}(_react2.default.Component);
 
-	exports.default = (0, _reduxForm.reduxForm)({ form: 'PostsNewForm' })((0, _reactRedux.connect)(null, { createPost: _index.createPost })(PostsNew));
+	function mapStateToProps(state) {
+		return {
+			zip: state.zip
+		};
+	}
+
+	exports.default = (0, _reduxForm.reduxForm)({ form: 'PostsNewForm' })((0, _reactRedux.connect)(mapStateToProps, { createPost: _index.createPost })(PostsNew));
 
 /***/ }),
-/* 357 */
+/* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51121,8 +51219,9 @@
 		_createClass(PostsShow, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				var id = this.props.match.params.id; //to get the id of the post we want 		
+				var id = this.props.match.params.id; //to get the id of the post we want 	
 
+				console.log('id is', id);
 				this.props.fetchPost(id);
 			}
 		}, {
