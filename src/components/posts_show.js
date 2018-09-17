@@ -8,7 +8,8 @@ class PostsShow extends React.Component{
 
 	componentDidMount(){
 
-		const { id } = this.props.match.params //to get the id of the post we want 		
+		const { id } = this.props.match.params //to get the id of the post we want 	
+		console.log('id is',id);	
 		this.props.fetchPost(id);
 	}
 

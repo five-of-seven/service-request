@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose} from 'redux';
 import promise from 'redux-promise';
 
 import { BrowserRouter , Route , Switch } from 'react-router-dom';
@@ -12,11 +12,15 @@ import PostsIndex from './components/posts_index.js';
 import PostsNew from './components/posts_new.js';
 import PostsShow from './components/posts_show.js';
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+// const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
+ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+ const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
+    applyMiddleware(promise)
+  ));
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+    <Provider store={store}>
     <BrowserRouter>
     	<div>
     	<Switch>

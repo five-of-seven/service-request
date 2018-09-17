@@ -21,6 +21,10 @@ class PostsNew extends React.Component {
 	}
 
 	onSubmit(values){
+		// var data = {'userId': '100','zip': 0000, 'subject': values.title, 'text': values.content }
+		// console.log('data',data)
+		values["zip"] = this.props.zip;
+		console.log('values',values);
 		this.props.createPost(values,()=>{
 			this.props.history.push('/'); 
 		});	
@@ -28,23 +32,17 @@ class PostsNew extends React.Component {
 
 	render(){
 		const { handleSubmit } = this.props;
-
 		return(
 			<div> 
 			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 				<Field
-					name="title"
-					label="Title"
-					component={this.renderField}
-				/>
-				<Field
-					name="categories"
-					label="Categories"
+					name="subject"
+					label="Subject"
 					component={this.renderField}
 				/>
 
 				<Field
-					name="content"
+					name="text"
 					label="Post Content"
 					component={this.renderField}
 				/>
@@ -59,7 +57,12 @@ class PostsNew extends React.Component {
 	}
 }
 
+function mapStateToProps(state){
+	return {
+		zip : state.zip
+	}
+}
 
 export default reduxForm({ form : 'PostsNewForm' })(
-	connect(null,{ createPost })(PostsNew)
+	connect(mapStateToProps,{ createPost })(PostsNew)
 );

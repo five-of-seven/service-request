@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts } from '../actions/index.js';
+import { fetchPosts, updateZip} from '../actions/index.js';
 import bindActionCreator from 'redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -16,8 +16,9 @@ class PostsIndex extends React.Component{
 	}
 
 	componentDidMount(){
+		this.props.updateZip()
 
-		this.props.fetchPosts();
+		this.props.fetchPosts(this.props.zip);
 	}
 
 	renderPosts(){	
@@ -25,11 +26,13 @@ class PostsIndex extends React.Component{
 		return _.map(this.props.posts , post => {
 
 			return (
-			<li key={post.id} className="list-group-item"> 
-			
-			<h3>{post.title}</h3>
-			<h6>Categories : {post.categories}</h6>
-			<p> Content : {post.content}</p>
+			// <li key={post.id} className="list-group-item"> 
+
+			<li key={post._id} className="list-group-item">
+			<h2>Pooja : </h2>
+			<h3>{post.subject}</h3>
+			<p>{post.text}</p> 
+			<i>Status : {post.status}</i>   <button type="submit" className="btn btn-success"> Fulfill Service</button>
 			
 			</li>
 			)
@@ -63,9 +66,10 @@ class PostsIndex extends React.Component{
 
 function mapStateToProps(state){
 	return {
-		posts : state.posts
+		posts : state.posts,
+		zip : state.zip
 	}
 }
 
 
-export default connect(mapStateToProps,{fetchPosts : fetchPosts})(PostsIndex)
+export default connect(mapStateToProps,{fetchPosts : fetchPosts, updateZip:updateZip})(PostsIndex)
