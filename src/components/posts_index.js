@@ -29,11 +29,7 @@ class PostsIndex extends React.Component{
 			// <li key={post.id} className="list-group-item"> 
 
 			<li key={post._id} className="list-group-item">
-			<h2>Pooja : </h2>
-			<h3>{post.subject}</h3>
-			<p>{post.text}</p> 
-			<i>Status : {post.status}</i>   <button type="submit" className="btn btn-success"> Fulfill Service</button>
-			
+			<h2>Pooja : </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
 			</li>
 			)
 		})

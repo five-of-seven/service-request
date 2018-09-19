@@ -99,23 +99,23 @@
 	var store = (0, _redux.createStore)(_reducers2.default, /* preloadedState, */composeEnhancers((0, _redux.applyMiddleware)(_reduxPromise2.default)));
 
 	_reactDom2.default.render(_react2.default.createElement(
-	    _reactRedux.Provider,
-	    { store: store },
+	  _reactRedux.Provider,
+	  { store: store },
+	  _react2.default.createElement(
+	    _reactRouterDom.BrowserRouter,
+	    null,
 	    _react2.default.createElement(
-	        _reactRouterDom.BrowserRouter,
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        _reactRouterDom.Switch,
 	        null,
-	        _react2.default.createElement(
-	            'div',
-	            null,
-	            _react2.default.createElement(
-	                _reactRouterDom.Switch,
-	                null,
-	                _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/new', component: _posts_new2.default }),
-	                _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/:id', component: _posts_show2.default }),
-	                _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _posts_index2.default })
-	            )
-	        )
+	        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/new', component: _posts_new2.default }),
+	        _react2.default.createElement(_reactRouterDom.Route, { path: '/posts/:id', component: _posts_show2.default }),
+	        _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _posts_index2.default })
+	      )
 	    )
+	  )
 	), document.querySelector('.container'));
 
 /***/ }),
@@ -36852,6 +36852,8 @@
 
 				var post = action.payload.data;
 
+				console.log('action in reducer FETCH_POST', action);
+
 				var newState = _extends({}, state);
 
 				newState[post.id] = post;
@@ -49246,10 +49248,11 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.UPDATE_ZIP = exports.FETCH_POST = exports.CREATE_POST = exports.FETCH_POSTS = undefined;
+	exports.DELETE_POST = exports.UPDATE_ZIP = exports.FETCH_POST = exports.CREATE_POST = exports.FETCH_POSTS = undefined;
 	exports.fetchPosts = fetchPosts;
 	exports.createPost = createPost;
 	exports.fetchPost = fetchPost;
+	exports.deletePost = deletePost;
 	exports.updateZip = updateZip;
 
 	var _axios = __webpack_require__(329);
@@ -49262,10 +49265,11 @@
 	var CREATE_POST = exports.CREATE_POST = 'CREATE_POST';
 	var FETCH_POST = exports.FETCH_POST = 'FETCH_POST';
 	var UPDATE_ZIP = exports.UPDATE_ZIP = 'UPDATE_ZIP';
+	var DELETE_POST = exports.DELETE_POST = 'DELETE_POST';
 
 	var rooturl = 'https://reduxblog.herokuapp.com/api';
 
-	var jonurl = 'http://18.191.218.237:80';
+	var jonurl = 'http://52.15.145.201';
 
 	var API_KEY = '?key=PAPERCLIP1234';
 
@@ -49309,13 +49313,25 @@
 
 	// fetching a single post based on id   --- fetch all the posts based on zipcode
 	function fetchPost(id) {
-		var request = _axios2.default.get(rooturl + '/posts/' + id + API_KEY);
-		consolelog('inside fetchPost', id);
-
+		//const request = axios.get(`${jonurl}/posts/${id}${API_KEY}`);
+		var request = _axios2.default.get(jonurl + '/serviceById/' + id);
 		return {
 
 			type: FETCH_POST,
 			payload: request
+		};
+	}
+
+	function deletePost(id, callback) {
+
+		var request = _axios2.default.get(jonurl + '/delete/' + id).then(function () {
+			callback();
+		});
+
+		return {
+
+			type: DELETE_POST,
+			payload: id
 		};
 	}
 
@@ -50993,26 +51009,13 @@
 								'Pooja : '
 							),
 							_react2.default.createElement(
-								'h3',
-								null,
-								post.subject
-							),
-							_react2.default.createElement(
-								'p',
-								null,
-								post.text
-							),
-							_react2.default.createElement(
-								'i',
-								null,
-								'Status : ',
-								post.status
-							),
-							'   ',
-							_react2.default.createElement(
-								'button',
-								{ type: 'submit', className: 'btn btn-success' },
-								' Fulfill Service'
+								_reactRouterDom.Link,
+								{ to: '/posts/' + post._id },
+								_react2.default.createElement(
+									'h3',
+									null,
+									post.subject
+								)
 							)
 						)
 					);
@@ -51197,6 +51200,8 @@
 
 	var _index = __webpack_require__(328);
 
+	var _reactRouterDom = __webpack_require__(75);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51221,14 +51226,27 @@
 			value: function componentDidMount() {
 				var id = this.props.match.params.id; //to get the id of the post we want 	
 
-				console.log('id is', id);
 				this.props.fetchPost(id);
+			}
+		}, {
+			key: 'onDeleteClick',
+			value: function onDeleteClick() {
+				var _this2 = this;
+
+				var id = this.props.match.params.id;
+
+
+				this.props.deletePost(id, function () {
+					_this2.props.history.push('/');
+				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
 				var post = this.props.post;
 
+
+				console.log("in posts show");
 
 				if (!post) {
 					return _react2.default.createElement(
@@ -51242,21 +51260,47 @@
 					'div',
 					null,
 					_react2.default.createElement(
-						'h3',
-						null,
-						post.title
+						_reactRouterDom.Link,
+						{ to: '/' },
+						'Back to Feed'
 					),
 					_react2.default.createElement(
-						'h6',
+						'button',
+						{ className: 'btn btn-danger pull-xs-right', onClick: this.onDeleteClick.bind(this) },
+						' Delete Post '
+					),
+					_react2.default.createElement(
+						'h2',
 						null,
-						'Categories : ',
-						post.categories
+						'Pooja : '
+					),
+					_react2.default.createElement(
+						'h3',
+						null,
+						post.subject
 					),
 					_react2.default.createElement(
 						'p',
 						null,
 						' Content : ',
-						post.content
+						post.text
+					),
+					_react2.default.createElement(
+						'p',
+						null,
+						post.text
+					),
+					_react2.default.createElement(
+						'i',
+						null,
+						'Status : ',
+						post.status
+					),
+					' ',
+					post.status === "open" && _react2.default.createElement(
+						'button',
+						{ type: 'submit', className: 'btn btn-success' },
+						' Fulfill Service'
 					)
 				);
 			}
@@ -51269,11 +51313,11 @@
 		var posts = _ref.posts;
 
 		return {
-			post: posts[ownProps.match.params.id]
+			post: posts[ownProps.match.params._id]
 		};
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPost: _index.fetchPost })(PostsShow);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPost: _index.fetchPost, deletePost: _index.deletePost })(PostsShow);
 
 /***/ })
 /******/ ]);

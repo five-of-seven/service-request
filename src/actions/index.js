@@ -4,10 +4,11 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const CREATE_POST = 'CREATE_POST';
 export const FETCH_POST = 'FETCH_POST';
 export const UPDATE_ZIP = 'UPDATE_ZIP';
+export const DELETE_POST = 'DELETE_POST';
 
 const rooturl = 'https://reduxblog.herokuapp.com/api'
 
-var jonurl = 'http://18.191.218.237:80';
+var jonurl = 'http://52.15.145.201';
 
  const API_KEY = '?key=PAPERCLIP1234';
 
@@ -53,14 +54,27 @@ export function createPost(values,callback){
 
 // fetching a single post based on id   --- fetch all the posts based on zipcode
 export function fetchPost(id){
-	const request = axios.get(`${rooturl}/posts/${id}${API_KEY}`);
-	consolelog('inside fetchPost',id);
-
+	//const request = axios.get(`${jonurl}/posts/${id}${API_KEY}`);
+	const request = axios.get(`${jonurl}/serviceById/${id}`)
 	return {
 
 		type : FETCH_POST,
 		payload : request
 	}
+}
+
+export function deletePost(id , callback){
+	
+	const request = axios.get(`${jonurl}/delete/${id}`).then(()=>{
+		callback()
+	});
+
+		return {
+
+		type : DELETE_POST,
+		payload : id
+	}
+
 }
 
 export function updateZip() {
