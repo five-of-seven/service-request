@@ -10,6 +10,8 @@ export default function(state={},action){
 			
 			const post = action.payload.data;
 
+			console.log('action in reducer FETCH_POST',action);
+
 			const newState= { ...state }
 
 			newState[post.id] = post;
