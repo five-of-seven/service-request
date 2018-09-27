@@ -1,9 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts, updateZip} from '../actions/index.js';
+import { fetchPosts, updateZip , getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
 import bindActionCreator from 'redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+import axios from 'axios';
+import $ from 'jquery';
+
+
 
 //instead of mapDispatchToProps in connect , we can pass the actioncreator directly too
 
@@ -16,6 +20,8 @@ class PostsIndex extends React.Component{
 	}
 
 	componentDidMount(){
+
+		console.log('in posts index');
 		this.props.updateZip()
 
 		this.props.fetchPosts(this.props.zip);
@@ -29,11 +35,23 @@ class PostsIndex extends React.Component{
 			// <li key={post.id} className="list-group-item"> 
 
 			<li key={post._id} className="list-group-item">
-			<h2>Pooja : </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
+			<h2>{post.userName} : </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
+			<i>Status : {post.status}</i>
 			</li>
 			)
 		})
 	}
+
+	onGetServiceByUserId(){
+
+		this.props.getServiceByUserId(this.props.userId);
+	}
+
+	onGetServiceByFulfillerId(){
+
+		this.props.getServiceByFulfillerId(this.props.userId);
+	}
+
 
 	render(){
 		return(
@@ -46,6 +64,14 @@ class PostsIndex extends React.Component{
 			Add a Post
 
 			</Link>
+
+			</div>
+
+			<div className="text-xs-left">
+
+			<button className="btn btn-primary" onClick={this.onGetServiceByUserId.bind(this)}> My Services </button>
+
+			<button className="btn btn-primary" onClick={this.onGetServiceByFulfillerId.bind(this)}> My Todos </button>
 
 			</div>
 
@@ -63,9 +89,11 @@ class PostsIndex extends React.Component{
 function mapStateToProps(state){
 	return {
 		posts : state.posts,
-		zip : state.zip
+		zip : state.zip,
+		userName : state.userName,
+		userId : state.userId
 	}
 }
 
 
-export default connect(mapStateToProps,{fetchPosts : fetchPosts, updateZip:updateZip})(PostsIndex)
+export default connect(mapStateToProps,{fetchPosts : fetchPosts, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(PostsIndex)

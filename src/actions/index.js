@@ -4,11 +4,14 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const CREATE_POST = 'CREATE_POST';
 export const FETCH_POST = 'FETCH_POST';
 export const UPDATE_ZIP = 'UPDATE_ZIP';
+export const UPDATE_USERID = 'UPDATE_USERID';
+export const UPDATE_USERNAME = 'UPDATE_USERNAME';
 export const DELETE_POST = 'DELETE_POST';
+export const FETCH_BY_USERID = 'FETCH_BY_USERID';
 
 const rooturl = 'https://reduxblog.herokuapp.com/api'
 
-var jonurl = 'http://52.15.145.201';
+var jonurl = 'http://18.224.150.52';
 
  const API_KEY = '?key=PAPERCLIP1234';
 
@@ -52,7 +55,7 @@ export function createPost(values,callback){
 
 }
 
-// fetching a single post based on id   --- fetch all the posts based on zipcode
+// fetching a single post based on messageId   --- fetch all the posts based on zipcode
 export function fetchPost(id){
 	//const request = axios.get(`${jonurl}/posts/${id}${API_KEY}`);
 	const request = axios.get(`${jonurl}/serviceById/${id}`)
@@ -62,6 +65,37 @@ export function fetchPost(id){
 		payload : request
 	}
 }
+
+export function getServiceByUserId(id){
+
+		var jonurl = 'http://18.224.150.52';
+
+		const url = `${jonurl}/servicesByUserId?id=${id}`
+
+		const request = axios.get(url);
+
+		return {
+
+			type : FETCH_BY_USERID,
+			payload : request
+		}
+}
+
+export function getServiceByFulfillerId(id){
+
+	var jonurl = 'http://18.224.150.52';
+
+	const url = `${jonurl}/servicesByFulfillerId?id=${id}`
+
+	const request = axios.get(url);
+
+		return {
+
+			type : FETCH_BY_USERID,
+			payload : request
+		}
+}
+
 
 export function deletePost(id , callback){
 	
@@ -81,5 +115,19 @@ export function updateZip() {
 	return {
 		type : UPDATE_ZIP,
 		payload : "0000"
+	}
+}
+
+export function updateUserId(){
+	return {
+		type : UPDATE_USERID,
+		payload : "1234"
+	}
+}
+
+export function updateUserName(){
+	return {
+		type : UPDATE_USERNAME,
+		payload : "pooja"
 	}
 }
