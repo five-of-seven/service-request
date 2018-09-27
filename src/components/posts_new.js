@@ -24,6 +24,9 @@ class PostsNew extends React.Component {
 		// var data = {'userId': '100','zip': 0000, 'subject': values.title, 'text': values.content }
 		// console.log('data',data)
 		values["zip"] = this.props.zip;
+		values["userId"] = this.props.userId;
+		values["userName"] = this.props.userName;
+		
 		console.log('values',values);
 		this.props.createPost(values,()=>{
 			this.props.history.push('/'); 
@@ -59,7 +62,9 @@ class PostsNew extends React.Component {
 
 function mapStateToProps(state){
 	return {
-		zip : state.zip
+		zip : state.zip,
+		userId : state.userId,
+		userName : state.userName
 	}
 }
 
