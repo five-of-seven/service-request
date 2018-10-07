@@ -10,8 +10,6 @@ export default function(state={},action){
 			
 			const post = action.payload.data;
 
-			console.log('action in reducer FETCH_POST',action);
-
 			const newState= { ...state }
 
 			newState[post.id] = post;
@@ -23,17 +21,13 @@ export default function(state={},action){
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload.data;
 			// var reverse = result.reverse();
-			// console.log('action.payload.data',reverse);
-			console.log('result in FETCH_POSTS',result);
-			
+			// console.log('action.payload.data',reverse);			
 			return _.mapKeys(result,'_id');
 
 
 		case FETCH_BY_USERID : 
 
 			var result = action.payload.data;
-
-			// console.log('result in FETCH_BY_USERID',result);
 
 			return _.mapKeys(result,'_id');
 

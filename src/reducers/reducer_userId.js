@@ -11,7 +11,6 @@ export default function(state="1234",action){
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload; // {userid , subject , zipcode , message}
 
-			console.log('result in UPDATE_USERID',action);
 			return result;
 
 	}

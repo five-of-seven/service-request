@@ -79,15 +79,15 @@
 
 	var _reducers2 = _interopRequireDefault(_reducers);
 
-	var _posts_index = __webpack_require__(358);
+	var _posts_index = __webpack_require__(359);
 
 	var _posts_index2 = _interopRequireDefault(_posts_index);
 
-	var _posts_new = __webpack_require__(360);
+	var _posts_new = __webpack_require__(361);
 
 	var _posts_new2 = _interopRequireDefault(_posts_new);
 
-	var _posts_show = __webpack_require__(361);
+	var _posts_show = __webpack_require__(362);
 
 	var _posts_show2 = _interopRequireDefault(_posts_show);
 
@@ -26413,15 +26413,15 @@
 
 	var _reducer_posts2 = _interopRequireDefault(_reducer_posts);
 
-	var _reducer_zip = __webpack_require__(355);
+	var _reducer_zip = __webpack_require__(356);
 
 	var _reducer_zip2 = _interopRequireDefault(_reducer_zip);
 
-	var _reducer_userId = __webpack_require__(356);
+	var _reducer_userId = __webpack_require__(357);
 
 	var _reducer_userId2 = _interopRequireDefault(_reducer_userId);
 
-	var _reducer_userName = __webpack_require__(357);
+	var _reducer_userName = __webpack_require__(358);
 
 	var _reducer_userName2 = _interopRequireDefault(_reducer_userName);
 
@@ -36863,8 +36863,6 @@
 
 				var post = action.payload.data;
 
-				console.log('action in reducer FETCH_POST', action);
-
 				var newState = _extends({}, state);
 
 				newState[post.id] = post;
@@ -36876,16 +36874,12 @@
 				//so we use lodash --> _.mapKeys(array,key)
 				var result = action.payload.data;
 				// var reverse = result.reverse();
-				// console.log('action.payload.data',reverse);
-				console.log('result in FETCH_POSTS', result);
-
+				// console.log('action.payload.data',reverse);			
 				return _lodash2.default.mapKeys(result, '_id');
 
 			case _index.FETCH_BY_USERID:
 
 				var result = action.payload.data;
-
-				// console.log('result in FETCH_BY_USERID',result);
 
 				return _lodash2.default.mapKeys(result, '_id');
 
@@ -49294,19 +49288,11 @@
 	var UPDATE_USERNAME = exports.UPDATE_USERNAME = 'UPDATE_USERNAME';
 	var DELETE_POST = exports.DELETE_POST = 'DELETE_POST';
 	var FETCH_BY_USERID = exports.FETCH_BY_USERID = 'FETCH_BY_USERID';
-
-	var rooturl = 'https://reduxblog.herokuapp.com/api';
-
-	var jonurl = 'http://18.224.150.52';
-
-	var API_KEY = '?key=PAPERCLIP1234';
+	var config = __webpack_require__(355);
 
 	function fetchPosts(zip) {
 
-		// const url = `${rooturl}/posts${API_KEY}`
-		console.log('zip', zip);
-
-		var url = jonurl + '/servicesByZip?zip=' + zip;
+		var url = config.SERVICE_DATABASE_URL + '/servicesByZip?zip=' + zip;
 
 		var request = _axios2.default.get(url);
 
@@ -49327,7 +49313,7 @@
 		// .then(()=>{
 		// 	callback()
 		// });
-		var request = _axios2.default.post(jonurl + '/service', values).then(function () {
+		var request = _axios2.default.post(config.SERVICE_DATABASE_URL + '/service', values).then(function () {
 			callback();
 		});
 
@@ -49342,7 +49328,7 @@
 	// fetching a single post based on messageId   --- fetch all the posts based on zipcode
 	function fetchPost(id) {
 		//const request = axios.get(`${jonurl}/posts/${id}${API_KEY}`);
-		var request = _axios2.default.get(jonurl + '/serviceById/' + id);
+		var request = _axios2.default.get(config.SERVICE_DATABASE_URL + '/serviceById/' + id);
 		return {
 
 			type: FETCH_POST,
@@ -49352,9 +49338,7 @@
 
 	function getServiceByUserId(id) {
 
-		var jonurl = 'http://18.224.150.52';
-
-		var url = jonurl + '/servicesByUserId?id=' + id;
+		var url = config.SERVICE_DATABASE_URL + '/servicesByUserId?id=' + id;
 
 		var request = _axios2.default.get(url);
 
@@ -49367,9 +49351,7 @@
 
 	function getServiceByFulfillerId(id) {
 
-		var jonurl = 'http://18.224.150.52';
-
-		var url = jonurl + '/servicesByFulfillerId?id=' + id;
+		var url = config.SERVICE_DATABASE_URL + '/servicesByFulfillerId?id=' + id;
 
 		var request = _axios2.default.get(url);
 
@@ -49382,7 +49364,7 @@
 
 	function deletePost(id, callback) {
 
-		var request = _axios2.default.get(jonurl + '/delete/' + id).then(function () {
+		var request = _axios2.default.get(config.SERVICE_DATABASE_URL + '/delete/' + id).then(function () {
 			callback();
 		});
 
@@ -49394,13 +49376,19 @@
 	}
 
 	function updateZip() {
+
+		var url = config.PROFILE_URL + '?userId=1234';
+
+		var request = _axios2.default.get(url);
+
 		return {
 			type: UPDATE_ZIP,
-			payload: "0000"
+			payload: request
 		};
 	}
 
 	function updateUserId() {
+
 		return {
 			type: UPDATE_USERID,
 			payload: "1234"
@@ -49408,9 +49396,16 @@
 	}
 
 	function updateUserName() {
+
+		var url = config.PROFILE_URL + '?userId=1234';
+
+		var request = _axios2.default.get(url);
+
+		console.log('request in updateUserName', request);
+
 		return {
 			type: UPDATE_USERNAME,
-			payload: "pooja"
+			payload: request
 		};
 	}
 
@@ -50963,6 +50958,21 @@
 
 /***/ }),
 /* 355 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+		SERVICE_DATABASE_URL: 'http://18.224.150.52',
+		// KARMA_POINTS_URL : 'https://uiwr3rzqge.execute-api.us-east-2.amazonaws.com/default/karma-points_put'
+		KARMA_POINTS_URL: 'http://18.222.112.139/karma-points_put',
+
+		PROFILE_URL: 'http://18.191.254.197/getprofile'
+
+	};
+
+/***/ }),
+/* 356 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50981,53 +50991,16 @@
 			case _index.UPDATE_ZIP:
 				//action.payload.data will return an array of objects --> which we have to convert to object of objects
 				//so we use lodash --> _.mapKeys(array,key)
-				var result = action.payload; // {userid , subject , zipcode , message}
+				var result = action.payload.data; // {city,email,karma,firstname,lastname,street,userid,userState,zipcode,_id}
+				var zip = result.zipCode;
 				// result.sort(function(a,b){
 				// 	return a.time-b.time;
 				// })
 				// console.log('result',result);
 				// console.log('action.payload.data',action.payload.data);
-				// return _.mapKeys(action.payload.data,'_id');
-				console.log('result in UPDATE_ZIP', action);
-				return result;
-
-		}
-
-		return state;
-	};
-
-	var _lodash = __webpack_require__(327);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _index = __webpack_require__(328);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-/* 356 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	exports.default = function () {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1234";
-		var action = arguments[1];
-
-
-		switch (action.type) {
-
-			case _index.UPDATE_USERID:
-				//action.payload.data will return an array of objects --> which we have to convert to object of objects
-				//so we use lodash --> _.mapKeys(array,key)
-				var result = action.payload; // {userid , subject , zipcode , message}
-
-				console.log('result in UPDATE_USERID', action);
-				return result;
+				// return _.mapKeys(result.data,'_id');
+				// console.log('result in UPDATE_ZIP',action);
+				return zip;
 
 		}
 
@@ -51053,13 +51026,13 @@
 	});
 
 	exports.default = function () {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "pooja";
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1234";
 		var action = arguments[1];
 
 
 		switch (action.type) {
 
-			case _index.UPDATE_USERNAME:
+			case _index.UPDATE_USERID:
 				//action.payload.data will return an array of objects --> which we have to convert to object of objects
 				//so we use lodash --> _.mapKeys(array,key)
 				var result = action.payload; // {userid , subject , zipcode , message}
@@ -51081,6 +51054,45 @@
 
 /***/ }),
 /* 358 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	exports.default = function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "pooja";
+		var action = arguments[1];
+
+
+		switch (action.type) {
+
+			case _index.UPDATE_USERNAME:
+				//action.payload.data will return an array of objects --> which we have to convert to object of objects
+				//so we use lodash --> _.mapKeys(array,key)
+				var result = action.payload.data; // {city,email,karma,firstname,lastname,street,userid,userState,zipcode,_id}
+
+				var fname = result.firstName;
+
+				return fname;
+
+		}
+
+		return state;
+	};
+
+	var _lodash = __webpack_require__(327);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _index = __webpack_require__(328);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ }),
+/* 359 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51113,7 +51125,7 @@
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _jquery = __webpack_require__(359);
+	var _jquery = __webpack_require__(360);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -51142,11 +51154,15 @@
 		_createClass(PostsIndex, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
+				var _this2 = this;
 
-				console.log('in posts index');
-				this.props.updateZip();
+				this.props.updateZip().then(function () {
 
-				this.props.fetchPosts(this.props.zip);
+					_this2.props.updateUserName().then(function () {
+
+						_this2.props.fetchPosts(_this2.props.zip);
+					});
+				});
 			}
 		}, {
 			key: 'renderPosts',
@@ -51247,10 +51263,10 @@
 		};
 	}
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPosts: _index.fetchPosts, getServiceByUserId: _index.getServiceByUserId, getServiceByFulfillerId: _index.getServiceByFulfillerId, updateZip: _index.updateZip })(PostsIndex);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPosts: _index.fetchPosts, updateUserName: _index.updateUserName, getServiceByUserId: _index.getServiceByUserId, getServiceByFulfillerId: _index.getServiceByFulfillerId, updateZip: _index.updateZip })(PostsIndex);
 
 /***/ }),
-/* 359 */
+/* 360 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -61620,7 +61636,7 @@
 
 
 /***/ }),
-/* 360 */
+/* 361 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -61748,13 +61764,13 @@
 	exports.default = (0, _reduxForm.reduxForm)({ form: 'PostsNewForm' })((0, _reactRedux.connect)(mapStateToProps, { createPost: _index.createPost })(PostsNew));
 
 /***/ }),
-/* 361 */
+/* 362 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+			value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -61765,7 +61781,7 @@
 
 	var _reactRedux = __webpack_require__(26);
 
-	var _jquery = __webpack_require__(359);
+	var _jquery = __webpack_require__(360);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -61781,189 +61797,201 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	var config = __webpack_require__(355);
+
 	//ownProps ==== this.props - is exactly same 
 
 	var PostsShow = function (_React$Component) {
-		_inherits(PostsShow, _React$Component);
+			_inherits(PostsShow, _React$Component);
 
-		function PostsShow() {
-			_classCallCheck(this, PostsShow);
+			function PostsShow() {
+					_classCallCheck(this, PostsShow);
 
-			return _possibleConstructorReturn(this, (PostsShow.__proto__ || Object.getPrototypeOf(PostsShow)).apply(this, arguments));
-		}
-
-		_createClass(PostsShow, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				var id = this.props.match.params.id; //to get the id of the post we want 	
-
-				this.props.fetchPost(id);
+					return _possibleConstructorReturn(this, (PostsShow.__proto__ || Object.getPrototypeOf(PostsShow)).apply(this, arguments));
 			}
-		}, {
-			key: 'onDeleteClick',
-			value: function onDeleteClick() {
-				var _this2 = this;
 
-				var id = this.props.match.params.id;
+			_createClass(PostsShow, [{
+					key: 'componentDidMount',
+					value: function componentDidMount() {
+							var id = this.props.match.params.id; //to get the id of the post we want 	
 
-
-				this.props.deletePost(id, function () {
-					_this2.props.history.push('/');
-				});
-			}
-		}, {
-			key: 'onOffer',
-			value: function onOffer() {
-				var _this3 = this;
-
-				var jonurl = 'http://18.224.150.52';
-
-				var post = this.props.post;
-
-
-				_jquery2.default.ajax({
-					url: jonurl + '/service/' + post._id + '?fulfillerName=' + this.props.userName + '&fulfillerId=' + this.props.userId + '&status=pending',
-					type: 'GET',
-					success: function success(data) {
-
-						console.log('success in onOffer', data);
-						_this3.props.history.push('/');
-					},
-					error: function error(err) {
-						console.log('error in onOffer', err);
+							this.props.fetchPost(id);
 					}
-				});
-			}
-		}, {
-			key: 'onAccept',
-			value: function onAccept() {
-				var _this4 = this;
+			}, {
+					key: 'onDeleteClick',
+					value: function onDeleteClick() {
+							var _this2 = this;
 
-				var jonurl = 'http://18.224.150.52';
-				var post = this.props.post;
+							var id = this.props.match.params.id;
 
 
-				_jquery2.default.ajax({
-					url: jonurl + '/service/' + post._id + '?status=fulfillment In Progress',
-					type: 'GET',
-					success: function success(data) {
-
-						console.log('success in onAccept', data);
-						_this4.props.history.push('/');
-					},
-					error: function error(err) {
-						console.log('error in onAccept', err);
+							this.props.deletePost(id, function () {
+									_this2.props.history.push('/');
+							});
 					}
-				});
-			}
-		}, {
-			key: 'onFulfill',
-			value: function onFulfill() {
-				var _this5 = this;
+			}, {
+					key: 'onOffer',
+					value: function onOffer() {
+							var _this3 = this;
 
-				var jonurl = 'http://18.224.150.52';
-				var post = this.props.post;
+							var post = this.props.post;
 
 
-				_jquery2.default.ajax({
-					url: jonurl + '/service/' + post._id + '?status=Completed',
-					type: 'GET',
-					success: function success(data) {
+							_jquery2.default.ajax({
+									url: config.SERVICE_DATABASE_URL + '/service/' + post._id + '?fulfillerName=' + this.props.userName + '&fulfillerId=' + this.props.userId + '&status=pending',
+									type: 'GET',
+									success: function success(data) {
 
-						console.log('success in onFulfill', data);
-						_this5.props.history.push('/');
-					},
-					error: function error(err) {
-						console.log('error in onFulfill', err);
+											console.log('success in onOffer', data);
+											_this3.props.history.push('/');
+									},
+									error: function error(err) {
+											console.log('error in onOffer', err);
+									}
+							});
 					}
-				});
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var post = this.props.post;
+			}, {
+					key: 'onAccept',
+					value: function onAccept() {
+							var _this4 = this;
+
+							var post = this.props.post;
 
 
-				console.log("this.props", this.props);
+							_jquery2.default.ajax({
+									url: config.SERVICE_DATABASE_URL + '/service/' + post._id + '?status=fulfillment In Progress',
+									type: 'GET',
+									success: function success(data) {
 
-				if (!post) {
-					return _react2.default.createElement(
-						'div',
-						null,
-						' Loading..! '
-					);
-				}
+											console.log('success in onAccept', data);
+											_this4.props.history.push('/');
+									},
+									error: function error(err) {
+											console.log('error in onAccept', err);
+									}
+							});
+					}
+			}, {
+					key: 'onFulfill',
+					value: function onFulfill() {
+							var _this5 = this;
 
-				return _react2.default.createElement(
-					'div',
-					null,
-					_react2.default.createElement(
-						_reactRouterDom.Link,
-						{ to: '/' },
-						'Back to Feed'
-					),
-					_react2.default.createElement(
-						'button',
-						{ className: 'btn btn-danger pull-xs-right', onClick: this.onDeleteClick.bind(this) },
-						' Delete Post '
-					),
-					_react2.default.createElement(
-						'h2',
-						null,
-						post.userName,
-						': '
-					),
-					_react2.default.createElement(
-						'h3',
-						null,
-						post.subject
-					),
-					_react2.default.createElement(
-						'p',
-						null,
-						' Content : ',
-						post.text
-					),
-					_react2.default.createElement(
-						'p',
-						null,
-						post.text
-					),
-					_react2.default.createElement(
-						'i',
-						null,
-						'Status : ',
-						post.status
-					),
-					' ',
-					this.props.userId !== this.props.post.userId && post.status === "open" && _react2.default.createElement(
-						'button',
-						{ type: 'submit', className: 'btn btn-success', onClick: this.onOffer.bind(this) },
-						' Fulfill Service'
-					),
-					post.status === "pending" && this.props.userId === this.props.post.userId && _react2.default.createElement(
-						'button',
-						{ type: 'submit', className: 'btn btn-success', onClick: this.onAccept.bind(this) },
-						' Accept Offer?'
-					),
-					post.status === "fulfillment In Progress" && this.props.userId === this.props.post.userId && _react2.default.createElement(
-						'button',
-						{ type: 'submit', className: 'btn btn-success', onClick: this.onFulfill.bind(this) },
-						' Service Completed?'
-					)
-				);
-			}
-		}]);
+							var post = this.props.post;
 
-		return PostsShow;
+
+							_jquery2.default.ajax({
+									url: config.SERVICE_DATABASE_URL + '/service/' + post._id + '?status=Completed',
+									type: 'GET',
+									success: function success(data) {
+
+											console.log('success in onFulfill', data);
+											_this5.props.history.push('/');
+									},
+									error: function error(err) {
+											console.log('error in onFulfill', err);
+									}
+							});
+
+							_jquery2.default.ajax({
+									url: config.KARMA_POINTS_URL + '?id=' + post.fulfillerId,
+									type: 'GET',
+									success: function success(data) {
+
+											console.log('success in adding Karma Point', data);
+											_this5.props.history.push('/');
+									},
+									error: function error(err) {
+											console.log('error in Karma Points', err);
+									}
+							});
+					}
+			}, {
+					key: 'render',
+					value: function render() {
+							var post = this.props.post;
+
+
+							console.log("this.props", this.props);
+
+							if (!post) {
+									return _react2.default.createElement(
+											'div',
+											null,
+											' Loading..! '
+									);
+							}
+
+							return _react2.default.createElement(
+									'div',
+									null,
+									_react2.default.createElement(
+											_reactRouterDom.Link,
+											{ to: '/' },
+											'Back to Feed'
+									),
+									_react2.default.createElement(
+											'button',
+											{ className: 'btn btn-danger pull-xs-right', onClick: this.onDeleteClick.bind(this) },
+											' Delete Post '
+									),
+									_react2.default.createElement(
+											'h2',
+											null,
+											post.userName,
+											': '
+									),
+									_react2.default.createElement(
+											'h3',
+											null,
+											post.subject
+									),
+									_react2.default.createElement(
+											'p',
+											null,
+											' Content : ',
+											post.text
+									),
+									_react2.default.createElement(
+											'p',
+											null,
+											post.text
+									),
+									_react2.default.createElement(
+											'i',
+											null,
+											'Status : ',
+											post.status
+									),
+									' ',
+									this.props.userId !== this.props.post.userId && post.status === "open" && _react2.default.createElement(
+											'button',
+											{ type: 'submit', className: 'btn btn-success', onClick: this.onOffer.bind(this) },
+											' Fulfill Service'
+									),
+									post.status === "pending" && this.props.userId === this.props.post.userId && _react2.default.createElement(
+											'button',
+											{ type: 'submit', className: 'btn btn-success', onClick: this.onAccept.bind(this) },
+											' Accept Offer?'
+									),
+									post.status === "fulfillment In Progress" && this.props.userId === this.props.post.userId && _react2.default.createElement(
+											'button',
+											{ type: 'submit', className: 'btn btn-success', onClick: this.onFulfill.bind(this) },
+											' Service Completed?'
+									)
+							);
+					}
+			}]);
+
+			return PostsShow;
 	}(_react2.default.Component);
 
 	function mapStateToProps(state, ownProps) {
-		return {
-			post: state.posts[ownProps.match.params._id],
-			userId: state.userId,
-			userName: state.userName
-		};
+			return {
+					post: state.posts[ownProps.match.params._id],
+					userId: state.userId,
+					userName: state.userName,
+					fulfillerId: state.fulfillerId
+			};
 	}
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchPost: _index.fetchPost, deletePost: _index.deletePost })(PostsShow);

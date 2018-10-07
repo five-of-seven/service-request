@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import $ from 'jquery';
 import { fetchPost , deletePost } from '../actions/index.js';
 import { Link } from 'react-router-dom';
+const config = require('../../config.js');
+
 
 
 //ownProps ==== this.props - is exactly same 
@@ -26,12 +28,10 @@ class PostsShow extends React.Component{
 
 	onOffer(){
 
-		var jonurl = 'http://18.224.150.52';
-
-		const { post } = this.props;
+	  const { post } = this.props;
 
 	  $.ajax({
-      url: `${jonurl}/service/${post._id}?fulfillerName=${this.props.userName}&fulfillerId=${this.props.userId}&status=pending`, 
+      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?fulfillerName=${this.props.userName}&fulfillerId=${this.props.userId}&status=pending`, 
       type:'GET',
       success: (data) => {
 
@@ -46,11 +46,10 @@ class PostsShow extends React.Component{
 
 
 	onAccept(){
-		var jonurl = 'http://18.224.150.52';
 		const { post } = this.props;
 
 	  $.ajax({
-      url: `${jonurl}/service/${post._id}?status=fulfillment In Progress`, 
+      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?status=fulfillment In Progress`, 
       type:'GET',
       success: (data) => {
 
@@ -64,11 +63,11 @@ class PostsShow extends React.Component{
 	 }
 
 	 onFulfill(){
-	 	var jonurl = 'http://18.224.150.52';
-		const { post } = this.props;
+	 
+	 const { post } = this.props;
 
 	 $.ajax({
-      url: `${jonurl}/service/${post._id}?status=Completed`, 
+      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?status=Completed`, 
       type:'GET',
       success: (data) => {
 
@@ -77,6 +76,20 @@ class PostsShow extends React.Component{
       },
       error: (err) => {
         console.log('error in onFulfill', err);
+      		}
+    	});
+
+
+	$.ajax({
+      url: `${config.KARMA_POINTS_URL}?id=${post.fulfillerId}`, 
+      type:'GET',
+      success: (data) => {
+
+        console.log('success in adding Karma Point',data);
+        this.props.history.push('/');
+      },
+      error: (err) => {
+        console.log('error in Karma Points', err);
       		}
     	});
 	 }
@@ -115,7 +128,8 @@ function mapStateToProps(state, ownProps){
 	return {
 		post : state.posts[ownProps.match.params._id],
 		userId : state.userId,
-		userName: state.userName
+		userName: state.userName,
+		fulfillerId : state.fulfillerId
 	}
 }
 
