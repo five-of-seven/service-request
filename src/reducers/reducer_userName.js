@@ -9,9 +9,11 @@ export default function(state="pooja",action){
 		case UPDATE_USERNAME : 
 			//action.payload.data will return an array of objects --> which we have to convert to object of objects
 			//so we use lodash --> _.mapKeys(array,key)
-			var result = action.payload; // {userid , subject , zipcode , message}
+			var result = action.payload.data; // {city,email,karma,firstname,lastname,street,userid,userState,zipcode,_id}
 
-			return result;
+			var fname = result.firstName;
+
+			return fname;
 
 	}
 

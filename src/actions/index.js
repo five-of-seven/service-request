@@ -8,19 +8,14 @@ export const UPDATE_USERID = 'UPDATE_USERID';
 export const UPDATE_USERNAME = 'UPDATE_USERNAME';
 export const DELETE_POST = 'DELETE_POST';
 export const FETCH_BY_USERID = 'FETCH_BY_USERID';
+const config = require('../../config.js');
 
-const rooturl = 'https://reduxblog.herokuapp.com/api'
 
-var jonurl = 'http://18.224.150.52';
-
- const API_KEY = '?key=PAPERCLIP1234';
 
 export function fetchPosts(zip){
 
-	// const url = `${rooturl}/posts${API_KEY}`
-	console.log('zip',zip);
 
-	const url = `${jonurl}/servicesByZip?zip=${zip}`
+	const url = `${config.SERVICE_DATABASE_URL}/servicesByZip?zip=${zip}`
 
 	const request = axios.get(url);
 
@@ -41,7 +36,7 @@ export function createPost(values,callback){
 	// .then(()=>{
 	// 	callback()
 	// });
-	const request = axios.post(`${jonurl}/service`, values)
+	const request = axios.post(`${config.SERVICE_DATABASE_URL}/service`, values)
 	.then(()=>{
 		callback()
 	});
@@ -58,7 +53,7 @@ export function createPost(values,callback){
 // fetching a single post based on messageId   --- fetch all the posts based on zipcode
 export function fetchPost(id){
 	//const request = axios.get(`${jonurl}/posts/${id}${API_KEY}`);
-	const request = axios.get(`${jonurl}/serviceById/${id}`)
+	const request = axios.get(`${config.SERVICE_DATABASE_URL}/serviceById/${id}`)
 	return {
 
 		type : FETCH_POST,
@@ -68,9 +63,7 @@ export function fetchPost(id){
 
 export function getServiceByUserId(id){
 
-		var jonurl = 'http://18.224.150.52';
-
-		const url = `${jonurl}/servicesByUserId?id=${id}`
+		const url = `${config.SERVICE_DATABASE_URL}/servicesByUserId?id=${id}`
 
 		const request = axios.get(url);
 
@@ -83,9 +76,7 @@ export function getServiceByUserId(id){
 
 export function getServiceByFulfillerId(id){
 
-	var jonurl = 'http://18.224.150.52';
-
-	const url = `${jonurl}/servicesByFulfillerId?id=${id}`
+	const url = `${config.SERVICE_DATABASE_URL}/servicesByFulfillerId?id=${id}`
 
 	const request = axios.get(url);
 
@@ -99,7 +90,7 @@ export function getServiceByFulfillerId(id){
 
 export function deletePost(id , callback){
 	
-	const request = axios.get(`${jonurl}/delete/${id}`).then(()=>{
+	const request = axios.get(`${config.SERVICE_DATABASE_URL}/delete/${id}`).then(()=>{
 		callback()
 	});
 
@@ -112,13 +103,19 @@ export function deletePost(id , callback){
 }
 
 export function updateZip() {
+
+	const url = `${config.PROFILE_URL}?userId=1234`
+
+	const request = axios.get(url);
+
 	return {
 		type : UPDATE_ZIP,
-		payload : "0000"
+		payload : request
 	}
 }
 
 export function updateUserId(){
+
 	return {
 		type : UPDATE_USERID,
 		payload : "1234"
@@ -126,8 +123,15 @@ export function updateUserId(){
 }
 
 export function updateUserName(){
+
+	const url = `${config.PROFILE_URL}?userId=1234`
+
+	const request = axios.get(url);
+
+	console.log('request in updateUserName',request);
+
 	return {
 		type : UPDATE_USERNAME,
-		payload : "pooja"
+		payload : request
 	}
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts, updateZip , getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
+import { fetchPosts, updateZip ,updateUserName, getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
 import bindActionCreator from 'redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -20,11 +20,17 @@ class PostsIndex extends React.Component{
 	}
 
 	componentDidMount(){
+		
+	this.props.updateZip().then(()=>{
 
-		console.log('in posts index');
-		this.props.updateZip()
+		this.props.updateUserName().then(()=>{
 
-		this.props.fetchPosts(this.props.zip);
+			this.props.fetchPosts(this.props.zip);
+		});
+		
+});
+		
+
 	}
 
 	renderPosts(){	
@@ -96,4 +102,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps,{fetchPosts : fetchPosts, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(PostsIndex)
+export default connect(mapStateToProps,{fetchPosts : fetchPosts, updateUserName:updateUserName, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(PostsIndex)
