@@ -13,6 +13,8 @@ export default function(state="pooja",action){
 
 			var fname = result.firstName;
 
+			console.log("fname in reducer_userName using Shaitals aws",fname)
+
 			return fname;
 
 	}
