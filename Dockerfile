@@ -1,6 +1,6 @@
 FROM node:7.6-alpine
 
-RUN webpack
+RUN npm install -g webpack
 
 RUN mkdir -p /src/app
 
@@ -12,8 +12,6 @@ RUN npm install
 
 RUN yarn global add nodemon
 
-CMD ["npm" , "run" , "startwebpack"]
-
 EXPOSE 3000
 
-CMD [ "npm", "run", "startdev" ]
+CMD [ "npm", "start" ]

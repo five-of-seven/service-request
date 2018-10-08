@@ -1,0 +1,22 @@
+version: 0.1
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region us-west-1)
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t service-request .
+      - docker tag service-request:latest 229162963440.dkr.ecr.us-west-1.amazonaws.com/service-request:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push 229162963440.dkr.ecr.us-west-1.amazonaws.com/service-request:latest
+      - echo Writing image definitions file...
+      - printf '[{"name":"service-container","imageUri":"%s"}]' 229162963440.dkr.ecr.us-west-1.amazonaws.com/service-request:latest > imagedefinitions.json
+artifacts:
+    files: imagedefinitions.json

@@ -5,9 +5,9 @@
   "main": "index.js",
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "startdev": "nodemon -L server/index.js",
     "startwebpack": "webpack  --config ./webpack.config.js --watch",
+    "start" :"nodemon ./server/index.js & webpack --watch --mode development --config ./webpack.config.js",
     "startnode": "nodemon server/index.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
