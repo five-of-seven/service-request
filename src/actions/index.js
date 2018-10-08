@@ -19,6 +19,8 @@ export function fetchPosts(zip){
 
 	const request = axios.get(url);
 
+	console.log("request from jon url",request);
+
 	return {
 
 		type: FETCH_POSTS,

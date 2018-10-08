@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import axios from 'axios';
 import $ from 'jquery';
+const moment = require('moment');
+
 
 
 
@@ -23,9 +25,10 @@ class PostsIndex extends React.Component{
 		
 	this.props.updateZip().then(()=>{
 
-		this.props.updateUserName().then(()=>{
+		this.props.updateUserName().then(()=>{ 
 
-			this.props.fetchPosts(this.props.zip);
+			console.log("this.props.userName",this.props.userName);
+			this.props.fetchPosts(this.props.zip); 
 		});
 		
 });
@@ -35,13 +38,14 @@ class PostsIndex extends React.Component{
 
 	renderPosts(){	
 
+
 		return _.map(this.props.posts , post => {
 
-			return (
-			// <li key={post.id} className="list-group-item"> 
+			var timeFromDb = post.time; 
 
+			return (
 			<li key={post._id} className="list-group-item">
-			<h2>{post.userName} : </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
+			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
 			<i>Status : {post.status}</i>
 			</li>
 			)
@@ -56,6 +60,11 @@ class PostsIndex extends React.Component{
 	onGetServiceByFulfillerId(){
 
 		this.props.getServiceByFulfillerId(this.props.userId);
+	}
+
+	onClickingHome(){
+
+		this.props.fetchPosts(this.props.zip);
 	}
 
 
@@ -74,6 +83,8 @@ class PostsIndex extends React.Component{
 			</div>
 
 			<div className="text-xs-left">
+
+			<button className="btn btn-primary" onClick={this.onClickingHome.bind(this)}> Home </button>
 
 			<button className="btn btn-primary" onClick={this.onGetServiceByUserId.bind(this)}> My Services </button>
 

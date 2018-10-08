@@ -4,7 +4,7 @@ import $ from 'jquery';
 import { fetchPost , deletePost } from '../actions/index.js';
 import { Link } from 'react-router-dom';
 const config = require('../../config.js');
-
+const moment = require('moment');
 
 
 //ownProps ==== this.props - is exactly same 
@@ -98,21 +98,20 @@ class PostsShow extends React.Component{
 	render(){
 
 		const { post } = this.props;
-
-
-		console.log("this.props",this.props);
+	
 
 		if(!post){
 				return <div> Loading..! </div>
 			}
 
+		var timeFromDb = post.time; 
+
 		return(
 			<div>
 			<Link to="/">Back to Feed</Link>
 			<button className = "btn btn-danger pull-xs-right" onClick={this.onDeleteClick.bind(this)}> Delete Post </button>
-			<h2>{post.userName}: </h2><h3>{post.subject}</h3>
+			<h2>{this.props.userName}: </h2><h3>{post.subject}</h3><i>{moment(timeFromDb).fromNow()}</i>
 			<p> Content : {post.text}</p>
-			<p>{post.text}</p> 
 			<i>Status : {post.status}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
 			{post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
 			{post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
