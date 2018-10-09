@@ -10,7 +10,6 @@ export default function(state="0000",action){
 			//action.payload.data will return an array of objects --> which we have to convert to object of objects
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload.data; // {city,email,karma,firstname,lastname,street,userid,userState,zipcode,_id}
-			console.log("result in reducer_zip",result);
 			var zip = result.zipCode;
 			// result.sort(function(a,b){
 			// 	return a.time-b.time;
