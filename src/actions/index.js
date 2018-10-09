@@ -19,8 +19,6 @@ export function fetchPosts(zip){
 
 	const request = axios.get(url);
 
-	console.log("request from jon url",request);
-
 	return {
 
 		type: FETCH_POSTS,
@@ -129,8 +127,6 @@ export function updateUserName(){
 	const url = `${config.PROFILE_URL}?userId=1234`
 
 	const request = axios.get(url);
-
-	console.log('request in updateUserName',request);
 
 	return {
 		type : UPDATE_USERNAME,
