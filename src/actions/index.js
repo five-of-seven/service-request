@@ -8,6 +8,7 @@ export const UPDATE_USERID = 'UPDATE_USERID';
 export const UPDATE_USERNAME = 'UPDATE_USERNAME';
 export const DELETE_POST = 'DELETE_POST';
 export const FETCH_BY_USERID = 'FETCH_BY_USERID';
+export const FETCH_COMMENTS = 'FETCH_COMMENTS';
 const config = require('../../config.js');
 
 
@@ -57,6 +58,17 @@ export function fetchPost(id){
 	return {
 
 		type : FETCH_POST,
+		payload : request
+	}
+}
+
+export function fetchComments(id){
+
+	const request = axios.get(`${config.SERVICE_DATABASE_URL}/commentsByServiceId/${id}`);
+
+	return {
+
+		type : FETCH_COMMENTS,
 		payload : request
 	}
 }

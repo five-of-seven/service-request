@@ -1,20 +1,34 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
-import { fetchPost , deletePost } from '../actions/index.js';
+import { Field, reduxForm } from 'redux-form'; 
+import { fetchPost , fetchComments, deletePost } from '../actions/index.js';
 import { Link } from 'react-router-dom';
 const config = require('../../config.js');
 const moment = require('moment');
+
 
 
 //ownProps ==== this.props - is exactly same 
 
 class PostsShow extends React.Component{
 
+	constructor(props){
+
+		super(props);
+
+ 		this.renderComments = this.renderComments.bind(this);
+
+ 	}
+
 	componentDidMount(){
 
 		const { id } = this.props.match.params; //to get the id of the post we want 	
-		this.props.fetchPost(id);
+
+		this.props.fetchComments(id).then(()=>{
+			this.props.fetchPost(id);
+		})
+
 	}
 
 	onDeleteClick(){
@@ -24,6 +38,19 @@ class PostsShow extends React.Component{
 		this.props.deletePost(id , ()=>{
 			this.props.history.push('/');
 		});
+	}
+
+	renderField(field){
+		//should return jsx and 'field' parameter gets it wired to the Field component
+		return(
+			<div className="form-group">
+				<label> {field.label} </label>
+				<input className="form-control"
+					type="text"
+					{...field.input} 
+				/>
+			</div>
+			)
 	}
 
 	onOffer(){
@@ -93,20 +120,59 @@ class PostsShow extends React.Component{
       		}
     	});
 	 }
+
+	onSubmit(values){
+
+		$.ajax({
+			url : `${config.SERVICE_DATABASE_URL}/comment`,
+			type : 'POST',
+			data : {text : values.comment,userId:this.props.userId,userName:this.props.userName,serviceId:this.props.post._id},
+			success : (data) => {
+				console.log("success in comments POST ", data); 
+			},
+			error : (err) => {
+				console.log("error in Comments", err);
+			}
+		})
+	}
+
+
+    renderComments(){	
+
+    	var comments = this.props.comments;
+
+    	delete comments.undefined;
+
+		return _.map(comments , comment=> {
+
+		var timeFromDb = comment.time; 
+
+	    return (
+	    	<div id={comment._id}>
+			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2>
+			<p>{comment.text}</p>
+			</div>
+		)
+		
+		})
+	}
 	
 
 	render(){
 
 		const { post } = this.props;
-	
+		const { id } = this.props.match.params;
 
 		if(!post){
 				return <div> Loading..! </div>
 			}
 
 		var timeFromDb = post.time; 
+		const handleSubmit = this.props.handleSubmit;
 
+		console.log("state of comments",this.props.comments);
 		return(
+
 			<div>
 			<Link to="/">Back to Feed</Link>
 			<button className = "btn btn-danger pull-xs-right" onClick={this.onDeleteClick.bind(this)}> Delete Post </button>
@@ -115,8 +181,15 @@ class PostsShow extends React.Component{
 			<i>Status : {post.status}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
 			{post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
 			{post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
+			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+				<Field
+					name="comment"
+					component={this.renderField}
+				/>
+			{this.renderComments()}
+			<button type="submit" className="btn btn-primary"> Add Comment</button>
+			</form>
 			</div>
-
 			)
 	}
 
@@ -128,10 +201,13 @@ function mapStateToProps(state, ownProps){
 		post : state.posts[ownProps.match.params._id],
 		userId : state.userId,
 		userName: state.userName,
-		fulfillerId : state.fulfillerId
+		fulfillerId : state.fulfillerId,
+		comments : state.comments
 	}
 }
 
 
-export default connect(mapStateToProps,{ fetchPost , deletePost })(PostsShow);
-
+//export default connect(mapStateToProps,{ fetchPost , deletePost })(PostsShow);
+export default reduxForm({ form : 'PostsCommentsForm' })(
+	connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost})(PostsShow)
+);
