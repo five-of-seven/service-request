@@ -8,6 +8,7 @@ import userNameReducer from './reducer_userName.js';
 
 const rootReducer = combineReducers({
   posts : PostsReducer,
+  comments : PostsReducer,
   form  : formReducer,
   zip : zipReducer,
   userId : userIdReducer,
