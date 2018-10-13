@@ -9,6 +9,7 @@ export const UPDATE_USERNAME = 'UPDATE_USERNAME';
 export const DELETE_POST = 'DELETE_POST';
 export const FETCH_BY_USERID = 'FETCH_BY_USERID';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
+export const DELETE_COMMENT = 'DELETE_COMMENT';
 const config = require('../../config.js');
 
 
@@ -101,6 +102,8 @@ export function getServiceByFulfillerId(id){
 
 
 export function deletePost(id , callback){
+
+	console.log("inside deletePost ACTIONS");
 	
 	const request = axios.get(`${config.SERVICE_DATABASE_URL}/delete/${id}`).then(()=>{
 		callback()
@@ -114,9 +117,36 @@ export function deletePost(id , callback){
 
 }
 
-export function updateZip() {
+export function deleteComment(commentId,postId){
 
-	const url = `${config.PROFILE_URL}?userId=1234`
+	console.log("commentId inside deleteComment in ACTION ",commentId);
+	console.log("serviceId inside deleteComment in ACTION",postId);
+
+	const url = `${config.SERVICE_DATABASE_URL}/comment`;
+
+	const request = axios.delete(`${url}/${commentId}/${postId}`).then((res)=>{
+		if(res){
+				console.log('response from axios delete',res);
+				console.log("response in deleteComment");
+			}else{
+				console.log('error in delete');
+			}
+	});
+
+	//make an object with cid pid 
+
+	console.log("request from deleteComment",request);
+
+	return {
+		type : DELETE_COMMENT , 
+		payload : commentId
+	}
+
+}
+
+export function updateZip(userId) {
+
+	const url = `${config.PROFILE_URL}?userId=${userId}`
 
 	const request = axios.get(url);
 
@@ -126,17 +156,17 @@ export function updateZip() {
 	}
 }
 
-export function updateUserId(){
+export function updateUserId(userId){
 
 	return {
 		type : UPDATE_USERID,
-		payload : "1234"
+		payload : userId
 	}
 }
 
-export function updateUserName(){
+export function updateUserName(userId){
 
-	const url = `${config.PROFILE_URL}?userId=1234`
+	const url = `${config.PROFILE_URL}?userId=${userId}`
 
 	const request = axios.get(url);
 

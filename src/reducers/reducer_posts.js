@@ -6,7 +6,7 @@ export default function(state={},action){
 
 	switch(action.type){
 
-		case FETCH_POST : 
+		case FETCH_POST : //fetching one particular post 
 			
 			const post = action.payload.data;
 
@@ -27,8 +27,6 @@ export default function(state={},action){
 		case FETCH_COMMENTS : 
 
 			var result = action.payload.data;
-
-			console.log("Result in FETCH_COMMENTS reducer",result);
 
 			 return _.mapKeys(result,'_id'); 
 

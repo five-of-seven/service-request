@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts, updateZip ,updateUserName, getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
+import { fetchPosts, updateZip , updateUserId, updateUserName, getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
 import bindActionCreator from 'redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -30,10 +30,18 @@ class PostsIndex extends React.Component{
  	}
 
  	componentDidMount(){
-		
- 	this.props.updateZip().then(()=>{
 
- 	this.props.updateUserName().then(()=>{ 
+ 	//call get the userID from Lukas
+
+ 	var query = this.props.location.search;
+
+ 	var userId = query.slice(8);
+
+ 	this.props.updateUserId(userId);
+		
+ 	this.props.updateZip(userId).then(()=>{
+
+ 	this.props.updateUserName(userId).then(()=>{ 
 
  	this.props.fetchPosts(this.props.zip); 
  	
@@ -126,6 +134,6 @@ PostsIndex.propTypes = {
 };
 
 
-export default connect(mapStateToProps, {fetchPosts : fetchPosts, updateUserName:updateUserName, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(withStyles(styles)(PostsIndex));
+export default connect(mapStateToProps, {fetchPosts : fetchPosts, updateUserName:updateUserName,updateUserId:updateUserId, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(withStyles(styles)(PostsIndex));
 
 

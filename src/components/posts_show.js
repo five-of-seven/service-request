@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import $ from 'jquery';
 import { Field, reduxForm } from 'redux-form'; 
-import { fetchPost , fetchComments, deletePost } from '../actions/index.js';
+import { fetchPost , fetchComments, deletePost , deleteComment } from '../actions/index.js';
 import { Link } from 'react-router-dom';
 const config = require('../../config.js');
 const moment = require('moment');
@@ -13,11 +13,16 @@ const moment = require('moment');
 
 class PostsShow extends React.Component{
 
+
 	constructor(props){
 
 		super(props);
 
  		this.renderComments = this.renderComments.bind(this);
+
+ 		const postId = this.props.match.params;
+
+
 
  	}
 
@@ -33,12 +38,30 @@ class PostsShow extends React.Component{
 
 	onDeleteClick(){
 
+		console.log("inside onDeleteClick to delete POST")
+
 		const { id } = this.props.match.params;
 		
 		this.props.deletePost(id , ()=>{
 			this.props.history.push('/');
 		});
 	}
+
+	OndeleteComment(){
+
+		console.log("OndeleteComment was Called!!! ");
+
+		var commentId = this.commentId;
+		var postId = this.serviceId
+
+		console.log("commentId inside PostsShow",commentId);
+
+		// var postId = this.props.match.params;
+		console.log("postId inside postId",postId);
+
+		this.deleteComment(commentId,postId)
+		
+}
 
 	renderField(field){
 		//should return jsx and 'field' parameter gets it wired to the Field component
@@ -121,7 +144,9 @@ class PostsShow extends React.Component{
     	});
 	 }
 
-	onSubmit(values){
+	onAddComment(values){
+
+		const { id } = this.props.match.params;
 
 		$.ajax({
 			url : `${config.SERVICE_DATABASE_URL}/comment`,
@@ -133,8 +158,14 @@ class PostsShow extends React.Component{
 			error : (err) => {
 				console.log("error in Comments", err);
 			}
+		}).then(()=>{
+
+			this.props.fetchComments(id).then(()=>{
+			this.props.fetchPost(id);
+		})
 		})
 	}
+
 
 
     renderComments(){	
@@ -143,14 +174,17 @@ class PostsShow extends React.Component{
 
     	delete comments.undefined;
 
+
 		return _.map(comments , comment=> {
 
 		var timeFromDb = comment.time; 
 
+		var commentServiceIds = {'commentId':comment._id,'serviceId':this.props.match.params.id , 'deleteComment':this.props.deleteComment,'fetchComments':this.props.fetchComments,'fetchPost':this.props.fetchPost , 'thisInstance':this}
+
 	    return (
 	    	<div id={comment._id}>
-			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2>
-			<p>{comment.text}</p>
+			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}{(this.props.userId===this.props.post.userId)&& <button className = "btn btn-danger pull-xs-right" onClick={this.OndeleteComment.bind(commentServiceIds)}>Delete</button>}</i></h6> </h2>
+			{comment.text}
 			</div>
 		)
 		
@@ -170,7 +204,6 @@ class PostsShow extends React.Component{
 		var timeFromDb = post.time; 
 		const handleSubmit = this.props.handleSubmit;
 
-		console.log("state of comments",this.props.comments);
 		return(
 
 			<div>
@@ -181,14 +214,8 @@ class PostsShow extends React.Component{
 			<i>Status : {post.status}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
 			{post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
 			{post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
-			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-				<Field
-					name="comment"
-					component={this.renderField}
-				/>
+			<Field name="comment" component={this.renderField}/><button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>
 			{this.renderComments()}
-			<button type="submit" className="btn btn-primary"> Add Comment</button>
-			</form>
 			</div>
 			)
 	}
@@ -202,12 +229,12 @@ function mapStateToProps(state, ownProps){
 		userId : state.userId,
 		userName: state.userName,
 		fulfillerId : state.fulfillerId,
-		comments : state.comments
+		comments : state.comments,
 	}
 }
 
 
 //export default connect(mapStateToProps,{ fetchPost , deletePost })(PostsShow);
 export default reduxForm({ form : 'PostsCommentsForm' })(
-	connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost})(PostsShow)
+	connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost , deleteComment})(PostsShow)
 );
