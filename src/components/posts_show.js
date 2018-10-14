@@ -60,9 +60,13 @@ class PostsShow extends React.Component{
 		// var postId = this.props.match.params;
 		console.log("postId inside postId",postId);
 
-		this.deleteComment(commentId,postId)
+		this.deleteComment(commentId,postId,()=>{
+			this.fetchComments(postId).then(()=>{
+				this.fetchPost(postId);
+			})
+		})
 		
-}
+	}
 
 	renderField(field){
 		//should return jsx and 'field' parameter gets it wired to the Field component
@@ -71,7 +75,7 @@ class PostsShow extends React.Component{
 				<label> {field.label} </label>
 				<input className="form-control"
 					type="text"
-					{...field.input} 
+					{...field.input} //request query
 				/>
 			</div>
 			)
@@ -155,6 +159,7 @@ class PostsShow extends React.Component{
 			data : {text : values.comment,userId:this.props.userId,userName:this.props.userName,serviceId:this.props.post._id},
 			success : (data) => {
 				console.log("success in comments POST ", data); 
+				values.comment = '';
 			},
 			error : (err) => {
 				console.log("error in Comments", err);
@@ -184,7 +189,7 @@ class PostsShow extends React.Component{
 
 	    return (
 	    	<div id={comment._id}>
-			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}{(this.props.userId===this.props.post.userId)&& <button className = "btn btn-danger pull-xs-right" onClick={this.OndeleteComment.bind(commentServiceIds)}>Delete</button>}</i></h6> </h2>
+			<h2>{comment.userName} <h6><i>{moment(timeFromDb).fromNow()}{(this.props.userId===comment.userId)&& <button className = "btn btn-danger pull-xs-right" onClick={this.OndeleteComment.bind(commentServiceIds)}>Delete</button>}</i></h6> </h2>
 			{comment.text}
 			</div>
 		)
@@ -210,9 +215,9 @@ class PostsShow extends React.Component{
 			<div>
 			<Link to="/">Back to Feed</Link>
 			<button className = "btn btn-danger pull-xs-right" onClick={this.onDeleteClick.bind(this)}> Delete Post </button>
-			<h2>{this.props.userName}: </h2><h3>{post.subject}</h3><i>{moment(timeFromDb).fromNow()}</i>
+			<h2>{post.userName}: </h2><h3>{post.subject}</h3><i>{moment(timeFromDb).fromNow()}</i>
 			<p> Content : {post.text}</p>
-			<i>Status : {post.status}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
+			<i>Status : {post.status} by {post.fulfillerName}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
 			{post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
 			{post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
 			<Field name="comment" component={this.renderField}/><button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>

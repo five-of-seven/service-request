@@ -77,9 +77,13 @@ export function fetchComments(id){
 
 export function getServiceByUserId(id){
 
+		console.log("id inside getServiceByUserId",id);
+
 		const url = `${config.SERVICE_DATABASE_URL}/servicesByUserId?id=${id}`
 
 		const request = axios.get(url);
+
+		console.log("request from servicesByUserId",request);
 
 		return {
 
@@ -118,7 +122,7 @@ export function deletePost(id , callback){
 
 }
 
-export function deleteComment(commentId,postId){
+export function deleteComment(commentId,postId,cb){
 
 	console.log("commentId inside deleteComment in ACTION ",commentId);
 	console.log("serviceId inside deleteComment in ACTION",postId);
@@ -136,6 +140,7 @@ export function deleteComment(commentId,postId){
     type: 'GET',
     success: (data) => {
 		console.log('success in deleteComment',data);
+		cb(data);
       },
     error: (err) =>{
     	console.log('error in deleteComment',JSON.stringify(err));
@@ -162,6 +167,8 @@ export function updateZip(userId) {
 }
 
 export function updateUserId(userId){
+
+	console.log("userId inside updateUserId",userId);
 
 	return {
 		type : UPDATE_USERID,

@@ -35,6 +35,8 @@ export default function(state={},action){
 
 			var result = action.payload.data;
 
+			console.log("action in FETCH_BY_USERID",action);
+
 			return _.mapKeys(result,'_id');
 
 	}

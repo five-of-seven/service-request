@@ -10,6 +10,7 @@ export default function(state="0000",action){
 			//action.payload.data will return an array of objects --> which we have to convert to object of objects
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload; // {userid , subject , zipcode , message}
+			console.log("result in reducer_userId",result);
 			return result;
 
 	}
