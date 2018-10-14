@@ -51,6 +51,7 @@ class PostsShow extends React.Component{
 
 		console.log("OndeleteComment was Called!!! ");
 
+
 		var commentId = this.commentId;
 		var postId = this.serviceId
 
