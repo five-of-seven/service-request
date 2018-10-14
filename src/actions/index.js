@@ -1,4 +1,5 @@
 import axios from 'axios';
+import $ from 'jquery';
 
 export const FETCH_POSTS = 'FETCH_POSTS';
 export const CREATE_POST = 'CREATE_POST';
@@ -122,20 +123,24 @@ export function deleteComment(commentId,postId){
 	console.log("commentId inside deleteComment in ACTION ",commentId);
 	console.log("serviceId inside deleteComment in ACTION",postId);
 
-	const url = `${config.SERVICE_DATABASE_URL}/comment`;
+	const url = `${config.SERVICE_DATABASE_URL}/comment?commentId=${commentId}&serviceId=${postId}`;
 
-	const request = axios.delete(`${url}/${commentId}/${postId}`).then((res)=>{
-		if(res){
-				console.log('response from axios delete',res);
-				console.log("response in deleteComment");
-			}else{
-				console.log('error in delete');
-			}
-	});
+	// const request = axios.delete(`${url}/${commentId}/${postId}`).then((res)=>{
+	// 			console.log('response from axios delete',res);
+	// }).catch(error => {
+	// 	console.log('error in deleteComment',JSON.stringify(error));
+	// });
 
-	//make an object with cid pid 
-
-	console.log("request from deleteComment",request);
+	$.ajax({
+    url: url,
+    type: 'GET',
+    success: (data) => {
+		console.log('success in deleteComment',data);
+      },
+    error: (err) =>{
+    	console.log('error in deleteComment',JSON.stringify(err));
+    }
+});
 
 	return {
 		type : DELETE_COMMENT , 
