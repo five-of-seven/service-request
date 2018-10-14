@@ -77,9 +77,13 @@ export function fetchComments(id){
 
 export function getServiceByUserId(id){
 
+		console.log("id inside getServiceByUserId",id);
+
 		const url = `${config.SERVICE_DATABASE_URL}/servicesByUserId?id=${id}`
 
 		const request = axios.get(url);
+
+		console.log("request from servicesByUserId",request);
 
 		return {
 
@@ -163,6 +167,8 @@ export function updateZip(userId) {
 }
 
 export function updateUserId(userId){
+
+	console.log("userId inside updateUserId",userId);
 
 	return {
 		type : UPDATE_USERID,

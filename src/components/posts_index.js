@@ -63,8 +63,8 @@ class PostsIndex extends React.Component{
       	className={this.props.classes.snackbar}
         message = {
         	<div id={post.subject}>
-			<h2>{this.props.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
-			<i>Status : {post.status}</i><p style={{marginRight: 2.5 + 'em'}}><Link to={`/posts/${post._id}`}><i className="material-icons">chat_bubble_outline</i></Link></p><p>{post.commentCount}</p>
+			<h2>{post.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
+			<i>Status : {post.status} by {post.fulfillerName}</i><p style={{marginRight: 2.5 + 'em'}}><Link to={`/posts/${post._id}`}><i className="material-icons">chat_bubble_outline</i></Link></p><p>{post.commentCount}</p>
 			</div>
 		     }
 		 />
