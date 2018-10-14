@@ -60,9 +60,13 @@ class PostsShow extends React.Component{
 		// var postId = this.props.match.params;
 		console.log("postId inside postId",postId);
 
-		this.deleteComment(commentId,postId)
+		this.deleteComment(commentId,postId,()=>{
+			this.fetchComments(postId).then(()=>{
+				this.fetchPost(postId);
+			})
+		})
 		
-}
+	}
 
 	renderField(field){
 		//should return jsx and 'field' parameter gets it wired to the Field component
@@ -71,7 +75,7 @@ class PostsShow extends React.Component{
 				<label> {field.label} </label>
 				<input className="form-control"
 					type="text"
-					{...field.input} 
+					{...field.input} //request query
 				/>
 			</div>
 			)
@@ -155,6 +159,7 @@ class PostsShow extends React.Component{
 			data : {text : values.comment,userId:this.props.userId,userName:this.props.userName,serviceId:this.props.post._id},
 			success : (data) => {
 				console.log("success in comments POST ", data); 
+				values.comment = '';
 			},
 			error : (err) => {
 				console.log("error in Comments", err);

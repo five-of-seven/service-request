@@ -118,7 +118,7 @@ export function deletePost(id , callback){
 
 }
 
-export function deleteComment(commentId,postId){
+export function deleteComment(commentId,postId,cb){
 
 	console.log("commentId inside deleteComment in ACTION ",commentId);
 	console.log("serviceId inside deleteComment in ACTION",postId);
@@ -136,6 +136,7 @@ export function deleteComment(commentId,postId){
     type: 'GET',
     success: (data) => {
 		console.log('success in deleteComment',data);
+		cb(data);
       },
     error: (err) =>{
     	console.log('error in deleteComment',JSON.stringify(err));
