@@ -4,10 +4,44 @@ import $ from 'jquery';
 import { Field, reduxForm } from 'redux-form'; 
 import { fetchPost , fetchComments, deletePost , deleteComment } from '../actions/index.js';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
+import AddIcon from '@material-ui/icons/Add';
+import DeleteIcon from '@material-ui/icons/Delete';
 const config = require('../../config.js');
 const moment = require('moment');
 
 
+const styles = theme => ({
+  root: {
+
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    flexGrow: 1,
+    maxWidth: 800,
+    // padding: theme.spacing.unit * 2,
+  },
+   button: {
+    margin: theme.spacing.unit,
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  rightIcon: {
+    marginLeft: theme.spacing.unit,
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+});
 
 //ownProps ==== this.props - is exactly same 
 
@@ -188,16 +222,38 @@ class PostsShow extends React.Component{
 		var commentServiceIds = {'commentId':comment._id,'serviceId':this.props.match.params.id , 'deleteComment':this.props.deleteComment,'fetchComments':this.props.fetchComments,'fetchPost':this.props.fetchPost , 'thisInstance':this}
 
 	    return (
-	    	<div id={comment._id}>
-			<h2>{comment.userName} <h6><i>{moment(timeFromDb).fromNow()}{(this.props.userId===comment.userId)&& <button className = "btn btn-danger pull-xs-right" onClick={this.OndeleteComment.bind(commentServiceIds)}>Delete</button>}</i></h6> </h2>
-			{comment.text}
-			</div>
+
+	    <div id={comment._id}>
+      	<Paper className={this.props.classes.root} elevation={1}>
+      	<Grid item xs={12} sm container>
+        <Grid item xs container direction="column" spacing={16}>
+        <Grid item xs>
+        <Typography variant="h5" component="h3">
+          {comment.userName}
+        </Typography>
+        <Typography color="textSecondary">{moment(timeFromDb).fromNow()}</Typography>
+        <Typography gutterBottom variant="subtitle1">
+          {comment.text}
+        </Typography>
+        </Grid>
+        </Grid>
+        <Grid item>
+         <Typography variant="subtitle1">
+
+         {(this.props.userId===comment.userId)&& <IconButton aria-label="Delete" className={this.props.classes.button} onClick={this.OndeleteComment.bind(commentServiceIds)}>
+          <DeleteIcon />
+        </IconButton>}
+        </Typography>
+        </Grid>
+        </Grid>
+      	</Paper>
+    	</div>
 		)
 		
 		})
 	}
 	
-
+	
 	render(){
 
 		const { post } = this.props;
@@ -211,19 +267,40 @@ class PostsShow extends React.Component{
 		const handleSubmit = this.props.handleSubmit;
 
 		return(
-
 			<div>
-			<Link to="/">Back to Feed</Link>
-			<button className = "btn btn-danger pull-xs-right" onClick={this.onDeleteClick.bind(this)}> Delete Post </button>
-			<h2>{post.userName}: </h2><h3>{post.subject}</h3><i>{moment(timeFromDb).fromNow()}</i>
-			<p> Content : {post.text}</p>
-			<i>Status : {post.status} by {post.fulfillerName}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
-			{post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
-			{post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
-			<Field name="comment" component={this.renderField}/><button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>
+			<Link to="/"><Button variant="contained" color="primary" className={this.props.classes.button}>
+			 Back to Feed
+       		 <Icon className={this.props.classes.leftIcon}></Icon>
+     		 </Button></Link>
+     		 <Button variant="contained" color="secondary" className={this.props.classes.button} onClick={this.onDeleteClick.bind(this)}>
+        	 Delete Post
+             <DeleteIcon className={this.props.classes.rightIcon} />
+             </Button>
+			 <Paper className={this.props.classes.root}>
+			<Grid item xs={12} sm container>
+          	<Grid item xs container direction="column" spacing={16}>
+            <Grid item xs>
+            <Typography gutterBottom variant="subtitle1">
+               {post.userName}
+              </Typography>
+            <Typography color="textSecondary">{moment(timeFromDb).fromNow()}</Typography>
+            <Typography variant="h5" component="h3">
+                {post.subject}
+              </Typography>
+            <Typography gutterBottom>{post.text}</Typography>
+            <i><Typography gutterBottom>Status : {post.status} by {post.fulfillerName}</Typography></i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
+            {post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
+            {post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
+            </Grid>
+            </Grid>
+            </Grid>
+            </Paper>
+            <Field name="comment" component={this.renderField}/>
+            <button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>
 			{this.renderComments()}
 			</div>
 			)
+		
 	}
 
 }
@@ -239,8 +316,16 @@ function mapStateToProps(state, ownProps){
 	}
 }
 
+PostsShow.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
 
 //export default connect(mapStateToProps,{ fetchPost , deletePost })(PostsShow);
 export default reduxForm({ form : 'PostsCommentsForm' })(
-	connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost , deleteComment})(PostsShow)
+	connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost , deleteComment})(withStyles(styles)(PostsShow))
 );
+
+//export default connect(mapStateToProps,{ fetchPost ,fetchComments, deletePost , deleteComment })(reduxForm({ form : 'PostsCommentsForm' })withStyles(styles)((PostsShow)));
+//export default connect(mapStateToProps, {fetchPosts : fetchPosts, updateUserName:updateUserName,updateUserId:updateUserId, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(withStyles(styles)(PostsIndex));
+

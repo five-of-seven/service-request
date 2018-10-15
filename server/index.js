@@ -6,9 +6,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
+app.use(express.static('semantic/out/semantic.min.css'));
 app.use('/', express.static('dist'));
 app.use('/',express.static('public'));
-app.use('/',express.static('semantic/dist/semantic.min.css'));
+//app.use('/',express.static('semantic/dist/semantic.min.css'));
 
 // app.get('/', function(req, res) {
 //   console.log('why is this route not doing anything?')
