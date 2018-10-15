@@ -10,6 +10,8 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
+import AddIcon from '@material-ui/icons/Add';
+
 
 const moment = require('moment');
 
@@ -18,6 +20,9 @@ const styles = theme => ({
   	snackbar: {
     	margin: theme.spacing.unit,
   			},
+  	button: {
+    margin: theme.spacing.unit,
+  },
 	});
 
 class PostsIndex extends React.Component{
@@ -95,9 +100,13 @@ class PostsIndex extends React.Component{
 
 			<div className="text-xs-right">
 
-			<Link className="btn btn-primary" to="/posts/new">
+			<Link to="/posts/new">
 
-			Add a Post
+			<Button variant="fab" color="secondary" aria-label="Add" className={this.props.classes.button}>
+            
+            <AddIcon />
+            
+            </Button>
 
 			</Link>
 
