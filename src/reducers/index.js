@@ -13,7 +13,8 @@ const rootReducer = combineReducers({
   zip : zipReducer,
   userId : userIdReducer,
   fulfillerId : userIdReducer,
-  userName : userNameReducer
+  userName : userNameReducer,
+  value : 0
 });
 
 export default rootReducer;

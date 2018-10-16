@@ -20,9 +20,9 @@ export default function(state={},action){
 			//action.payload.data will return an array of objects --> which we have to convert to object of objects
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload.data;
-			// var reverse = result.reverse();
-			// console.log('action.payload.data',reverse);			
-			return _.mapKeys(result,'_id');
+			var reverse = result.reverse();
+			reverse = reverse.slice(0,20);
+			return _.mapKeys(reverse,'_id');
 
 		case FETCH_COMMENTS : 
 

@@ -15,6 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
 const config = require('../../config.js');
 const moment = require('moment');
 
@@ -29,6 +30,9 @@ const styles = theme => ({
     maxWidth: 800,
     // padding: theme.spacing.unit * 2,
   },
+    snackbar: {
+    	margin: theme.spacing.unit,
+  			},
    button: {
     margin: theme.spacing.unit,
   },
@@ -120,7 +124,7 @@ class PostsShow extends React.Component{
 	  const { post } = this.props;
 
 	  $.ajax({
-      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?fulfillerName=${this.props.userName}&fulfillerId=${this.props.userId}&status=pending`, 
+      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?fulfillerName=${this.props.userName}&fulfillerId=${this.props.userId}&status=Offered`, 
       type:'GET',
       success: (data) => {
 
@@ -138,7 +142,7 @@ class PostsShow extends React.Component{
 		const { post } = this.props;
 
 	  $.ajax({
-      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?status=fulfillment In Progress`, 
+      url: `${config.SERVICE_DATABASE_URL}/service/${post._id}?status=Fulfillment In Progress`, 
       type:'GET',
       success: (data) => {
 
@@ -272,32 +276,32 @@ class PostsShow extends React.Component{
 			 Back to Feed
        		 <Icon className={this.props.classes.leftIcon}></Icon>
      		 </Button></Link>
-     		 <Button variant="contained" color="secondary" className={this.props.classes.button} onClick={this.onDeleteClick.bind(this)}>
+     		 {this.props.userId===post.userId && <Button variant="contained" color="secondary" className={this.props.classes.button} onClick={this.onDeleteClick.bind(this)}>
         	 Delete Post
              <DeleteIcon className={this.props.classes.rightIcon} />
-             </Button>
-			 <Paper className={this.props.classes.root}>
-			<Grid item xs={12} sm container>
-          	<Grid item xs container direction="column" spacing={16}>
-            <Grid item xs>
-            <Typography gutterBottom variant="subtitle1">
-               {post.userName}
-              </Typography>
-            <Typography color="textSecondary">{moment(timeFromDb).fromNow()}</Typography>
-            <Typography variant="h5" component="h3">
-                {post.subject}
-              </Typography>
-            <Typography gutterBottom>{post.text}</Typography>
-            <i><Typography gutterBottom>Status : {post.status} by {post.fulfillerName}</Typography></i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onOffer.bind(this)}> Fulfill Service</button>}
-            {post.status==="pending" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
-            {post.status==="fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onFulfill.bind(this)}> Service Completed?</button>}
+             </Button>}
+            <Grid item xs={12} sm container>
+         	<Grid item xs container direction="column" spacing={16}>
+        	<Grid item xs>
+            <SnackbarContent
+      		className={this.props.classes.snackbar}
+        	message = {
+        		<div>
+               <h4>{post.userName}</h4>
+            <i>{moment(timeFromDb).fromNow()}</i>
+            <h3>{post.subject}</h3>
+            <p>{post.text}</p>
+            <i>Status : {post.status} by {post.fulfillerName}</i> {this.props.userId!==this.props.post.userId && post.status==="open" && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onOffer.bind(this)}>Offer to fulfill Service</button>}
+            {post.status==="Offered" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onAccept.bind(this)}> Accept Offer?</button>}
+            {post.status==="Fulfillment In Progress" && this.props.userId===this.props.post.userId && <button type="submit" className="btn btn-success pull-xs-right" onClick={this.onFulfill.bind(this)}> Mark Service Completed</button>}
+            	</div>
+            }/>
             </Grid>
             </Grid>
             </Grid>
-            </Paper>
-            <Field name="comment" component={this.renderField}/>
-            <button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>
 			{this.renderComments()}
+			<Field name="comment" component={this.renderField}/>
+            <button name="comment" type="submit" onClick={handleSubmit(this.onAddComment.bind(this))} className="btn btn-primary"> Add Comment</button>
 			</div>
 			)
 		
