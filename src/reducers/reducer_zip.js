@@ -11,7 +11,7 @@ export default function(state="0000",action){
 			//so we use lodash --> _.mapKeys(array,key)
 			var result = action.payload.data; // {city,email,karma,firstname,lastname,street,userid,userState,zipcode,_id}
 			var zip = result.zipCode;
-			return 20601;
+			return 12345;
 
 	}
 
