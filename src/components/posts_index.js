@@ -37,7 +37,7 @@ class PostsIndex extends React.Component{
 
  	var query = this.props.location.search;
 
- 	console.log("query",query);
+ 	console.log("this.props",this.props);
 
  	if(query){
 
@@ -73,12 +73,13 @@ class PostsIndex extends React.Component{
     	});
 
   //  	this.props.history.push("/");
- 	}
+ 	// }
 
 
 
 
      }
+ }
 
     renderPosts(){	
 
