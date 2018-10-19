@@ -31,19 +31,28 @@ class PostsIndex extends React.Component{
 
  		var query = this.props.location.search; //""
 
- 	console.log("this.props",this.props);
-
- 	if(query){
-
  		var uId = query.slice(8);
 
- 		console.log("if query",uId);
+ 		console.log("this.props",this.props);
 
- 		this.props.updateUserId(uId);
+ 		this.state= {
+ 			userID : uId
+ 		}
+
+ 	}
+
+ 	componentDidMount(){
+
+ 	console.log("userid in cdm",this.state.userID)
+
+ 	if(this.state.userID){
+
+
+ 		this.props.updateUserId(this.state.userID);
 		
- 		this.props.updateZip(uId).then(()=>{
+ 		this.props.updateZip(this.state.userID).then(()=>{
 
- 			this.props.updateUserName(uId).then(()=>{ 
+ 			this.props.updateUserName(this.state.userID).then(()=>{ 
 
  				this.props.fetchPosts(this.props.zip); 
  	
@@ -72,58 +81,7 @@ class PostsIndex extends React.Component{
 
 
 
-     }
-
- 	}
-
- 	componentDidMount(){
-
- 	//call get the userID from Lukas
-
- 	// var query = this.props.location.search; //""
-
- 	// console.log("this.props",this.props);
-
- 	// if(query){
-
- 	// 	var uId = query.slice(8);
-
- 	// 	console.log("if query",uId);
-
- 	// 	this.props.updateUserId(uId);
-		
- 	// 	this.props.updateZip(uId).then(()=>{
-
- 	// 		this.props.updateUserName(uId).then(()=>{ 
-
- 	// 			this.props.fetchPosts(this.props.zip); 
- 	
- 	// 		});
-		
-  //   	});
- 
- 	// }	
- 	// else{
-
- 	// 	this.props.updateUserId(this.props.userId);
-		
- 	// 	this.props.updateZip(this.props.userId).then(()=>{
-
- 	// 		this.props.updateUserName(this.props.userId).then(()=>{ 
-
- 	// 			this.props.fetchPosts(this.props.zip); 
- 	
- 	// 		});
-		
-  //   	});
-
-  // //  	this.props.history.push("/");
- 	// // }
-
-
-
-
-  //    }
+  }
  }
 
     renderPosts(){	
