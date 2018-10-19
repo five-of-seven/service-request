@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { UPDATE_ZIP } from '../actions/index.js'; //importing the variable NOT THE FUNCTION
 
-export default function(state="0000",action){
+export default function(state="",action){
 
 	switch(action.type){
 
