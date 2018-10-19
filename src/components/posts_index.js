@@ -29,59 +29,32 @@ class PostsIndex extends React.Component{
 
  		this.renderPosts = this.renderPosts.bind(this);
 
- 		var query = this.props.location.search; //""
-
- 		var uId = query.slice(8);
 
  		console.log("this.props",this.props);
 
  		this.state= {
- 			userID : uId
+ 			userId: this.props.userId || this.props.location.search.slice(8) 
  		}
 
  	}
 
  	componentDidMount(){
 
- 	console.log("userid in cdm",this.state.userID)
-
- 	if(this.state.userID){
+ 		console.log("userid in cdm",this.state.userId)
 
 
- 		this.props.updateUserId(this.state.userID);
+
+ 		this.props.updateUserId(this.state.userId);
 		
- 		this.props.updateZip(this.state.userID).then(()=>{
+ 		this.props.updateZip(this.state.userId).then(()=>{
 
- 			this.props.updateUserName(this.state.userID).then(()=>{ 
+ 			this.props.updateUserName(this.state.userId).then(()=>{ 
 
  				this.props.fetchPosts(this.props.zip); 
  	
  			});
 		
     	});
- 
- 	}	
- 	else{
-
- 		this.props.updateUserId(this.props.userId);
-		
- 		this.props.updateZip(this.props.userId).then(()=>{
-
- 			this.props.updateUserName(this.props.userId).then(()=>{ 
-
- 				this.props.fetchPosts(this.props.zip); 
- 	
- 			});
-		
-    	});
-
-  //  	this.props.history.push("/");
- 	// }
-
-
-
-
-  }
  }
 
     renderPosts(){	
