@@ -37,23 +37,56 @@ class PostsIndex extends React.Component{
 
  	var query = this.props.location.search;
 
- 	var userId = query.slice(8);
+ 	console.log("query",query);
 
- 	this.props.updateUserId(userId);
+ 	if(query){
+
+ 		var uId = query.slice(8);
+
+ 		console.log("if query",uId);
+
+ 		this.props.updateUserId(uId);
 		
- 	this.props.updateZip(userId).then(()=>{
+ 		this.props.updateZip(uId).then(()=>{
 
- 	this.props.updateUserName(userId).then(()=>{ 
+ 			this.props.updateUserName(uId).then(()=>{ 
 
- 	this.props.fetchPosts(this.props.zip); 
+ 				this.props.fetchPosts(this.props.zip); 
  	
- 	});
+ 			});
 		
-    });
+    	});
+ 
+ 	}	
+ 	else{
+
+ 		this.props.updateUserId(this.props.userId);
+		
+ 		this.props.updateZip(this.props.userId).then(()=>{
+
+ 			this.props.updateUserName(this.props.userId).then(()=>{ 
+
+ 				this.props.fetchPosts(this.props.zip); 
+ 	
+ 			});
+		
+    	});
+
+  //  	this.props.history.push("/");
+ 	}
+
+
+
 
      }
 
     renderPosts(){	
+
+    	if(this.props.post===null){
+			return(
+				<p>"Add a service request!"</p>
+				)
+		}
 
 		return _.map(this.props.posts , post => {
 
@@ -65,7 +98,7 @@ class PostsIndex extends React.Component{
       	className={this.props.classes.snackbar}
         message = {
         	<div id={post.subject}>
-			<h2>{post.userName} <h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
+			<h2>{post.userName} {post.lastName?post.lastName:''}<h6><i>{moment(timeFromDb).fromNow()}</i></h6> </h2><Link to={`/posts/${post._id}`}><h3>{post.subject}</h3></Link>
 			<i>Status : {post.status}  {post.status!==open && post.fulfillerName!==null && 'by '+ post.fulfillerName}</i><p style={{marginRight: 2.5 + 'em'}}><Link to={`/posts/${post._id}`}><i className="material-icons">chat_bubble_outline</i></Link>  {post.commentCount} comments  </p>
 			</div>
 		     }

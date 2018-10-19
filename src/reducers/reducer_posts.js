@@ -34,10 +34,10 @@ export default function(state={},action){
 		case FETCH_BY_USERID : 
 
 			var result = action.payload.data;
+			var reverse = result.reverse();
+			reverse = reverse.slice(0,20);
 
-			console.log("action in FETCH_BY_USERID",action);
-
-			return _.mapKeys(result,'_id');
+			return _.mapKeys(reverse,'_id');
 
 	}
 

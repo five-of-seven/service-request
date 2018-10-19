@@ -287,7 +287,7 @@ class PostsShow extends React.Component{
       		className={this.props.classes.snackbar}
         	message = {
         		<div>
-               <h4>{post.userName}</h4>
+               <h4>{post.userName} {post.lastName?post.lastName:''}</h4>
             <i>{moment(timeFromDb).fromNow()}</i>
             <h3>{post.subject}</h3>
             <p>{post.text}</p>
