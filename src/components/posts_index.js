@@ -29,13 +29,7 @@ class PostsIndex extends React.Component{
 
  		this.renderPosts = this.renderPosts.bind(this);
 
- 	}
-
- 	componentDidMount(){
-
- 	//call get the userID from Lukas
-
- 	var query = this.props.location.search;
+ 		var query = this.props.location.search; //""
 
  	console.log("this.props",this.props);
 
@@ -79,6 +73,57 @@ class PostsIndex extends React.Component{
 
 
      }
+
+ 	}
+
+ 	componentDidMount(){
+
+ 	//call get the userID from Lukas
+
+ 	// var query = this.props.location.search; //""
+
+ 	// console.log("this.props",this.props);
+
+ 	// if(query){
+
+ 	// 	var uId = query.slice(8);
+
+ 	// 	console.log("if query",uId);
+
+ 	// 	this.props.updateUserId(uId);
+		
+ 	// 	this.props.updateZip(uId).then(()=>{
+
+ 	// 		this.props.updateUserName(uId).then(()=>{ 
+
+ 	// 			this.props.fetchPosts(this.props.zip); 
+ 	
+ 	// 		});
+		
+  //   	});
+ 
+ 	// }	
+ 	// else{
+
+ 	// 	this.props.updateUserId(this.props.userId);
+		
+ 	// 	this.props.updateZip(this.props.userId).then(()=>{
+
+ 	// 		this.props.updateUserName(this.props.userId).then(()=>{ 
+
+ 	// 			this.props.fetchPosts(this.props.zip); 
+ 	
+ 	// 		});
+		
+  //   	});
+
+  // //  	this.props.history.push("/");
+ 	// // }
+
+
+
+
+  //    }
  }
 
     renderPosts(){	
