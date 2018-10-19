@@ -11,6 +11,7 @@ import reducers from './reducers';
 import PostsIndex from './components/posts_index.js';
 import PostsNew from './components/posts_new.js';
 import PostsShow from './components/posts_show.js';
+import rootReducer from './reducers/index.js';
 
 // const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
@@ -19,6 +20,8 @@ import PostsShow from './components/posts_show.js';
     applyMiddleware(promise)
   ));
 
+console.log("rootReducer",rootReducer);
+console.log("store.getState",store.getState())
 ReactDOM.render(
     <Provider store={store}>
     <BrowserRouter>
@@ -26,7 +29,7 @@ ReactDOM.render(
     	<Switch>
     	<Route path="/posts/new" component = {PostsNew} />
       <Route path="/posts/:id" component = {PostsShow}/>
-    	<Route path="/" component = {PostsIndex} />
+      <Route path="/" component={PostsIndex}/>
     	</Switch>
     	</div>
     </BrowserRouter>
