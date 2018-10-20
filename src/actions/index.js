@@ -7,6 +7,7 @@ export const FETCH_POST = 'FETCH_POST';
 export const UPDATE_ZIP = 'UPDATE_ZIP';
 export const UPDATE_USERID = 'UPDATE_USERID';
 export const UPDATE_USERNAME = 'UPDATE_USERNAME';
+export const UPDATE_LASTNAME = 'UPDATE_LASTNAME';
 export const DELETE_POST = 'DELETE_POST';
 export const FETCH_BY_USERID = 'FETCH_BY_USERID';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
@@ -184,6 +185,18 @@ export function updateUserName(userId){
 
 	return {
 		type : UPDATE_USERNAME,
+		payload : request
+	}
+}
+
+export function updateLastName(userId){
+
+	const url = `${config.PROFILE_URL}?userId=${userId}`
+
+	const request = axios.get(url);
+
+	return {
+		type : UPDATE_LASTNAME,
 		payload : request
 	}
 }

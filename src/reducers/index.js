@@ -4,6 +4,7 @@ import PostsReducer from './reducer_posts.js';
 import zipReducer from './reducer_zip.js';
 import userIdReducer from './reducer_userId.js';
 import userNameReducer from './reducer_userName.js';
+import lastNameReducer from './reducer_lastName.js';
 
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   userId : userIdReducer,
   fulfillerId : userIdReducer,
   userName : userNameReducer,
+  lastName : lastNameReducer,
   value : 0
 });
 
