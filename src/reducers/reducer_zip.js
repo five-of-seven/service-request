@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { UPDATE_ZIP } from '../actions/index.js'; //importing the variable NOT THE FUNCTION
+import { UPDATE_ZIP } from '../actions/index.js';
 
 export default function(state="",action){
 
@@ -13,7 +13,7 @@ export default function(state="",action){
 			console.log("result in reducer_zip",result)
 			var zip = result.zipCode;
 			console.log("zip in reducer_zip",zip);
-			return zip;
+			return zip;		
 
 	}
 
