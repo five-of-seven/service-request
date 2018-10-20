@@ -13,6 +13,9 @@ import PostsNew from './components/posts_new.js';
 import PostsShow from './components/posts_show.js';
 import rootReducer from './reducers/index.js';
 
+import myTheme from './ui/theme/index';
+import { MuiThemeProvider } from '@material-ui/core/styles';
+
 // const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
 
  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -25,6 +28,7 @@ console.log("store.getState",store.getState())
 ReactDOM.render(
     <Provider store={store}>
     <BrowserRouter>
+    <MuiThemeProvider theme={myTheme}>
     	<div>
     	<Switch>
     	<Route path="/posts/new" component = {PostsNew} />
@@ -32,6 +36,7 @@ ReactDOM.render(
       <Route path="/" component={PostsIndex}/>
     	</Switch>
     	</div>
+    </MuiThemeProvider>
     </BrowserRouter>
   </Provider>
   , document.querySelector('.container'));

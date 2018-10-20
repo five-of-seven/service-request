@@ -194,7 +194,7 @@ class PostsShow extends React.Component{
 		$.ajax({
 			url : `${config.SERVICE_DATABASE_URL}/comment`,
 			type : 'POST',
-			data : {text : values.comment,userId:this.props.userId,userName:this.props.userName,serviceId:this.props.post._id},
+			data : {text : values.comment,userId:this.props.userId,userName:this.props.userName, lastName:this.props.lastName, serviceId:this.props.post._id},
 			success : (data) => {
 				console.log("success in comments POST ", data); 
 				values.comment = '';
@@ -233,7 +233,7 @@ class PostsShow extends React.Component{
         <Grid item xs container direction="column" spacing={16}>
         <Grid item xs>
         <Typography variant="h5" component="h3">
-          {comment.userName}
+          {comment.userName} {comment.lastName?comment.lastName:''}
         </Typography>
         <Typography color="textSecondary">{moment(timeFromDb).fromNow()}</Typography>
         <Typography gutterBottom variant="subtitle1">
@@ -315,6 +315,7 @@ function mapStateToProps(state, ownProps){
 		post : state.posts[ownProps.match.params._id],
 		userId : state.userId,
 		userName: state.userName,
+    lastName:state.lastName,
 		fulfillerId : state.fulfillerId,
 		comments : state.comments,
 	}
