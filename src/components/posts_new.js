@@ -3,6 +3,17 @@ import { Field, reduxForm } from 'redux-form'; //reduxForm is very similiar to c
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { createPost } from '../actions/index.js';
+import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
+
+const styles = theme => ({
+
+   button: {
+    margin: theme.spacing.unit,
+  },
+});
 
 class PostsNew extends React.Component {
 
@@ -23,6 +34,7 @@ class PostsNew extends React.Component {
 	onSubmit(values){
 		// var data = {'userId': '100','zip': 0000, 'subject': values.title, 'text': values.content }
 		// console.log('data',data)
+		console.log("IN ONSUBMIT");
 		values["zip"] = this.props.zip;
 		values["userId"] = this.props.userId;
 		values["userName"] = this.props.userName;
@@ -69,6 +81,10 @@ function mapStateToProps(state){
 		lastName : state.lastName
 	}
 }
+
+PostsNew.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 export default reduxForm({ form : 'PostsNewForm' })(
 	connect(mapStateToProps,{ createPost })(PostsNew)
