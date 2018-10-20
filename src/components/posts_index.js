@@ -21,6 +21,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import MenuList from '@material-ui/core/MenuList';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
@@ -40,7 +41,6 @@ const styles = theme => ({
     flexGrow: 1,
     height: 440,
     zIndex: 1,
-    overflow: 'hidden',
     position: 'relative',
     display: 'flex',
   },
@@ -54,7 +54,7 @@ const styles = theme => ({
   content: {
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 3 + 45,
     minWidth: 0, // So the Typography noWrap works
   },
   toolbar: theme.mixins.toolbar,
@@ -65,6 +65,16 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit * 4,
     backgroundColor: theme.palette.background.default,
   },
+    menuItem: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& $primary, & $icon': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+  primary: {},
+  icon: {},
 	});
 
 class PostsIndex extends React.Component{
@@ -172,38 +182,34 @@ class PostsIndex extends React.Component{
 		const { anchorEl } = this.state;
 
 		return(
-		
 		<div className={this.props.classes.root}>
-      	<AppBar position="absolute" className={this.props.classes.appBar}>
-        <Toolbar>
-          <Typography variant="h6" color="inherit" noWrap>
+	 	<Paper>
+	 	    <Typography variant="h4" color="#ad9c78">
             {this.props.city?this.props.city+', ':'' }{this.props.userState?this.props.userState:'' } {this.props.zip} 
           </Typography>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: this.props.classes.drawerPaper,
-        }}
-      >
-        <div className={this.props.classes.toolbar} />
-        <List>
-        	<ListItem><Link to="/posts/new">Add New Request</Link></ListItem>
-        </List>
-        <Divider />
-        <List>
-        	<ListItem button onClick={this.onClickingHome.bind(this)}>Feed</ListItem>
+      <MenuList>
+        <MenuItem className={this.props.classes.menuItem}>
+        <ListItem><Link to="/posts/new">Add New Request</Link></ListItem>
+        </MenuItem>
+        <MenuItem className={this.props.classes.menuItem}>
+			<ListItem button onClick={this.onClickingHome.bind(this)}>Feed</ListItem>        </MenuItem>
+        <MenuItem className={this.props.classes.menuItem}>
         	<ListItem button onClick={this.onGetServiceByUserId.bind(this)}>My Needs</ListItem>
-        	<ListItem button onClick={this.onGetServiceByFulfillerId.bind(this)}>My Todos</ListItem>
-        	<ListItem><Link to="/health"> Health </Link></ListItem>
-        </List>
-      </Drawer>
-      	<main className={this.props.classes.content}>
-        <div className={this.props.classes.toolbar} />
-			{this.renderPosts()}
-		</main>
-    	</div>			
+        </MenuItem>
+        <MenuItem className={this.props.classes.menuItem}>
+			<ListItem button onClick={this.onGetServiceByFulfillerId.bind(this)}>My Todos</ListItem>  
+		</MenuItem>      
+		<MenuItem className={this.props.classes.menuItem}>
+			<ListItem><Link to="/health"> Health </Link></ListItem>
+        </MenuItem>
+      </MenuList>
+    </Paper>
+     <main className={this.props.classes.content}>
+	<div>
+		{this.renderPosts()}
+	</div>
+	</main>
+	</div>
 		)
 	}
 };
