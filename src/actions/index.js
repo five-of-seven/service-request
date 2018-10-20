@@ -11,6 +11,7 @@ export const UPDATE_LASTNAME = 'UPDATE_LASTNAME';
 export const DELETE_POST = 'DELETE_POST';
 export const FETCH_BY_USERID = 'FETCH_BY_USERID';
 export const FETCH_COMMENTS = 'FETCH_COMMENTS';
+export const FETCH_HEALTH = 'FETCH_HEALTH';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
 const config = require('../../config.js');
 
@@ -200,3 +201,4 @@ export function updateLastName(userId){
 		payload : request
 	}
 }
+
