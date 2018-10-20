@@ -5,7 +5,7 @@ import zipReducer from './reducer_zip.js';
 import userIdReducer from './reducer_userId.js';
 import userNameReducer from './reducer_userName.js';
 import lastNameReducer from './reducer_lastName.js';
-
+import healthReducer from './reducer_health.js';
 
 const rootReducer = combineReducers({
   posts : PostsReducer,
@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   fulfillerId : userIdReducer,
   userName : userNameReducer,
   lastName : lastNameReducer,
+  statusCount: healthReducer,
   value : 0
 });
 

@@ -11,6 +11,7 @@ import reducers from './reducers';
 import PostsIndex from './components/posts_index.js';
 import PostsNew from './components/posts_new.js';
 import PostsShow from './components/posts_show.js';
+import Health from './components/health.js';
 import rootReducer from './reducers/index.js';
 
 import myTheme from './ui/theme/index';
@@ -33,6 +34,7 @@ ReactDOM.render(
     	<Switch>
     	<Route path="/posts/new" component = {PostsNew} />
       <Route path="/posts/:id" component = {PostsShow}/>
+      <Route path="/health" component={Health}/>
       <Route path="/" component={PostsIndex}/>
     	</Switch>
     	</div>

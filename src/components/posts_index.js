@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts, updateZip , updateUserId, updateUserName, updateLastName, getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
+import { fetchPosts, fetchHealth, updateZip , updateUserId, updateUserName, updateLastName, getServiceByUserId , getServiceByFulfillerId} from '../actions/index.js';
 import bindActionCreator from 'redux';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
@@ -15,6 +15,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import {Doughnut} from 'react-chartjs-2';
+import Paper from '@material-ui/core/Paper';
 
 
 
@@ -28,6 +30,14 @@ const styles = theme => ({
 
   	 root: {
     	flexGrow: 1,
+  },
+
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    height: 50,
+    paddingLeft: theme.spacing.unit * 4,
+    backgroundColor: theme.palette.background.default,
   },
 	});
 
@@ -66,7 +76,7 @@ class PostsIndex extends React.Component{
  			this.props.updateUserName(this.state.userId).then(()=>{ 
 
  				this.props.fetchPosts(this.props.zip); 
- 	
+ 		
  			});
 		
     	});
@@ -129,6 +139,7 @@ class PostsIndex extends React.Component{
 		this.props.fetchPosts(this.props.zip);
 	}
 
+
 	render(){
 		
 		const { anchorEl } = this.state;
@@ -144,16 +155,23 @@ class PostsIndex extends React.Component{
 
 			<Menu id="simple-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose}>
  				
- 				<MenuItem><Link to="/posts/new">Add Post</Link></MenuItem>
+ 				<MenuItem><Link to="/posts/new">Add New Request</Link></MenuItem>
  				<MenuItem onClick={this.onClickingHome.bind(this)}>Feed</MenuItem>
-          		<MenuItem onClick={this.onGetServiceByUserId.bind(this)}>My Services</MenuItem>
+          		<MenuItem onClick={this.onGetServiceByUserId.bind(this)}>My Needs</MenuItem>
           		<MenuItem onClick={this.onGetServiceByFulfillerId.bind(this)}>My Todos</MenuItem>
+          		<MenuItem><Link to="/health"> Health </Link></MenuItem>
         	
         	</Menu>
 
         	</Grid>
 
 			<Grid item xs={9}>
+
+			<Paper square elevation={0} className={this.props.classes.header}>
+          	
+          	<Typography variant="h5" component="h3">{this.props.zip}</Typography>
+        	
+        	</Paper>
 
 			{this.renderPosts()}
 
@@ -173,7 +191,8 @@ function mapStateToProps(state){
 		zip : state.zip,
 		userName : state.userName,
 		userId : state.userId,
-		lastName : state.lastName
+		lastName : state.lastName,
+		statusCount:state.statusCount
 	}
 }
 
@@ -182,6 +201,6 @@ PostsIndex.propTypes = {
 };
 
 
-export default connect(mapStateToProps, {fetchPosts : fetchPosts, updateUserName:updateUserName, updateLastName:updateLastName,updateUserId:updateUserId, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(withStyles(styles)(PostsIndex));
+export default connect(mapStateToProps, {fetchPosts : fetchPosts, fetchHealth:fetchHealth, updateUserName:updateUserName, updateLastName:updateLastName,updateUserId:updateUserId, getServiceByUserId:getServiceByUserId, getServiceByFulfillerId:getServiceByFulfillerId, updateZip:updateZip})(withStyles(styles)(PostsIndex));
 
 
