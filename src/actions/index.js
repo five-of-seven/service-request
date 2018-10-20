@@ -5,6 +5,8 @@ export const FETCH_POSTS = 'FETCH_POSTS';
 export const CREATE_POST = 'CREATE_POST';
 export const FETCH_POST = 'FETCH_POST';
 export const UPDATE_ZIP = 'UPDATE_ZIP';
+export const UPDATE_CITY = 'UPDATE_CITY';
+export const UPDATE_STATE = 'UPDATE_STATE';
 export const UPDATE_USERID = 'UPDATE_USERID';
 export const UPDATE_USERNAME = 'UPDATE_USERNAME';
 export const UPDATE_LASTNAME = 'UPDATE_LASTNAME';
@@ -164,6 +166,30 @@ export function updateZip(userId) {
 
 	return {
 		type : UPDATE_ZIP,
+		payload : request
+	}
+}
+
+export function updateCity(userId) {
+
+	const url = `${config.PROFILE_URL}?userId=${userId}`
+
+	const request = axios.get(url);
+
+	return {
+		type : UPDATE_CITY,
+		payload : request
+	}
+}
+
+export function updateState(userId) {
+
+	const url = `${config.PROFILE_URL}?userId=${userId}`
+
+	const request = axios.get(url);
+
+	return {
+		type : UPDATE_STATE,
 		payload : request
 	}
 }
